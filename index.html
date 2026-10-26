@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>స్తోత్ర నిధి</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+Telugu:wght@400;600&family=Noto+Serif+Devanagari:wght@400;600&display=swap">
+<style>
+:root{--pri:#0B57D0;--bg:#F1F3F4;--paper:#fff;--tx:#1E1E1E;--tx2:#5E5E5E;--neu:#E8EAED;--div:#E0E0E0;--onpri:#fff;--hov:#0A47A6;--bd:#BDBDBD;--saf:#E65100;color-scheme:light}
+:root[data-theme="dark"]{--pri:#8AB4F8;--bg:#1F1F1F;--paper:#2B2B2B;--tx:#fff;--tx2:#B0B0B0;--neu:#424242;--div:#404040;--onpri:#1F1F1F;--hov:#7CA8E8;--bd:#424242;--saf:#FFB74D;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--bg);color:var(--tx);font:400 14px/1.5 Inter,sans-serif;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.serif{font-family:"Noto Serif Telugu","Noto Serif Devanagari",Georgia,serif}
+:lang(hi) .serif{font-family:"Noto Serif Devanagari","Noto Serif Telugu",Georgia,serif}
+button,input{font:500 14px Inter,"Noto Serif Telugu","Noto Serif Devanagari",sans-serif}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+#app{height:100%;display:flex;flex-direction:column}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 16px;background:var(--paper);border-bottom:1px solid var(--div)}
+header b{font-size:18px;color:var(--pri)}
+.tools{display:flex;gap:8px;align-items:center}
+.seg{display:flex;background:var(--neu);border-radius:20px;padding:2px}
+.seg button{background:none;color:var(--tx);border:0;border-radius:18px;padding:6px 14px;cursor:pointer;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--pri);color:var(--onpri)}
+#theme{background:var(--neu);color:var(--tx);border:0;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px}
+main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,3vh,28px);padding:12px 16px;width:100%;max-width:960px;margin:0 auto}
+.hero{text-align:center}
+.om{font-size:clamp(28px,6vh,44px);line-height:1;color:var(--saf)}
+h1{margin:6px 0 2px;font-size:clamp(24px,5vh,38px);font-weight:600;line-height:1.3}
+.sub{margin:0;color:var(--tx2);font-size:clamp(13px,2vh,15px)}
+.search{width:100%;max-width:640px;position:relative}
+.search input{width:100%;height:clamp(48px,7vh,60px);padding:0 20px 0 52px;border:2px solid var(--bd);border-radius:30px;background:var(--paper);color:var(--tx);font-size:clamp(15px,2.2vh,18px);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.search input:focus{border-color:var(--pri);outline:0}
+.search svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:22px;height:22px;stroke:var(--tx2);fill:none;stroke-width:2;stroke-linecap:round}
+.grid{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;min-height:clamp(120px,22vh,170px);padding:12px;background:var(--paper);border:1px solid var(--div);border-radius:12px;color:var(--tx);text-decoration:none;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.card:hover{border-color:var(--pri)}
+.badge{width:44px;height:44px;border-radius:50%;background:var(--neu);color:var(--pri);display:grid;place-items:center;font-size:20px;font-weight:600}
+.card h2{margin:0;font-size:clamp(14px,2.2vh,17px);font-weight:600;line-height:1.4}
+.card small{color:var(--tx2);font-size:12px}
+.msg{color:var(--tx2);text-align:center}
+.soon{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;color:var(--tx2);font-size:12px}
+.soon span.c{background:var(--neu);border-radius:16px;padding:4px 12px;font-size:13px;color:var(--tx)}
+.hide{display:none!important}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr);gap:8px}header b{display:none}.seg button{padding:6px 10px}.badge{width:36px;height:36px;font-size:17px}.card{padding:8px;gap:4px}}
+@media(max-height:560px){.soon,.sub{display:none}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <b class="serif" id="brand"></b>
+  <div class="tools">
+    <div class="seg serif" role="group" aria-label="Language">
+      <button data-l="te">తె</button><button data-l="hi">हि</button><button data-l="en">EN</button>
+    </div>
+    <button id="theme" aria-label="Theme">◐</button>
+  </div>
+</header>
+<main>
+  <div class="hero">
+    <div class="om serif" aria-hidden="true">ॐ</div>
+    <h1 class="serif" id="title"></h1>
+    <p class="sub" id="sub"></p>
+  </div>
+  <div class="search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <input id="q" type="search" autocomplete="off" enterkeyhint="go">
+  </div>
+  <nav class="grid" id="grid"></nav>
+  <p class="msg hide" id="none"></p>
+  <div class="soon" id="soon"></div>
+</main>
+</div>
+<script>
+// ===== ఇక్కడ కొత్త గ్రంథాలను జోడించండి / ADD NEW ITEMS HERE =====
+var ITEMS=[
+ {file:"శ్రీమద్ భగవద్గీత(SrimadBhagavadGita_Telugu)_V1.0.html",g:"ॐ",
+  t:{te:"శ్రీమద్ భగవద్గీత",hi:"श्रीमद् भगवद्गीता",en:"Srimad Bhagavad Gita"},
+  k:"gita geeta bhagavad krishna arjuna గీత కృష్ణ"},
+ {file:"శ్రీ లలితా సహస్రనామం(Sri Lalita Sahasranamam)_V1.0.html",g:"❁",
+  t:{te:"శ్రీ లలితా సహస్రనామం",hi:"श्री ललिता सहस्रनाम",en:"Sri Lalita Sahasranamam"},
+  k:"lalita sahasranama devi amma అమ్మవారు దేవి"},
+ {file:"శ్రీ హనుమాన్ చాలీసా (Sri Hanuman Chalisa_Telugu)_V1.0.html",g:"✦",
+  t:{te:"శ్రీ హనుమాన్ చాలీసా",hi:"श्री हनुमान चालीसा",en:"Sri Hanuman Chalisa"},
+  k:"hanuman chalisa anjaneya rama ఆంజనేయ"},
+ {file:"శ్రీ వేంకటేశ్వర సుప్రభాతము (Sri Venkateswara Suprabhatam – Telugu _ Hindi).html",g:"✺",
+  t:{te:"శ్రీ వేంకటేశ్వర సుప్రభాతము",hi:"श्री वेंकटेश्वर सुप्रभातम्",en:"Sri Venkateswara Suprabhatam"},
+  k:"venkateswara suprabhatam balaji tirumala govinda తిరుమల"}
+];
+var SOON={te:["కథలు","వేదాలు","ఉపనిషత్తులు"],hi:["कथाएँ","वेद","उपनिषद"],en:["Stories","Vedas","Upanishads"]};
+var UI={
+ te:{brand:"స్తోత్ర నిధి",title:"స్తోత్ర నిధి",sub:"స్తోత్రాలు, గ్రంథాలు – ఒకే చోట",ph:"గ్రంథం పేరు వెతకండి…",none:"ఏమీ దొరకలేదు. వేరే పేరుతో ప్రయత్నించండి.",soon:"త్వరలో:"},
+ hi:{brand:"स्तोत्र निधि",title:"स्तोत्र निधि",sub:"स्तोत्र और ग्रंथ – एक ही स्थान पर",ph:"ग्रंथ का नाम खोजें…",none:"कुछ नहीं मिला। दूसरा नाम आज़माएँ।",soon:"जल्द आ रहा है:"},
+ en:{brand:"Stotra Nidhi",title:"Stotra Nidhi",sub:"Stotrams and scriptures in one place",ph:"Search a stotram or scripture…",none:"No match found. Try another name.",soon:"Coming soon:"}
+};
+var L="te",$=function(i){return document.getElementById(i)},root=document.documentElement;
+try{L=localStorage.getItem("widu-lang")||"te"}catch(e){}
+if(!UI[L])L="te";
+
+function norm(s){return (s||"").toLowerCase().replace(/\s+/g," ").trim()}
+function hay(it){return norm(it.t.te+" "+it.t.hi+" "+it.t.en+" "+it.k)}
+function other(it){return L==="en"?it.t.te:it.t.en}
+function render(){
+  var u=UI[L],q=norm($("q").value),n=0;
+  root.lang=L;document.title=u.title;
+  $("brand").textContent=u.brand;$("title").textContent=u.title;$("sub").textContent=u.sub;$("q").placeholder=u.ph;$("q").setAttribute("aria-label",u.ph);
+  document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.l===L)});
+  var g=$("grid");g.innerHTML="";
+  ITEMS.forEach(function(it){
+    if(q&&hay(it).indexOf(q)<0)return;n++;
+    var a=document.createElement("a");a.className="card";a.href=encodeURI(it.file);
+    a.innerHTML='<span class="badge serif"></span><h2 class="serif"></h2><small></small>';
+    a.children[0].textContent=it.g;a.children[1].textContent=it.t[L];a.children[2].textContent=other(it);
+    g.appendChild(a);
+  });
+  $("none").textContent=u.none;$("none").classList.toggle("hide",n>0);
+  $("soon").classList.toggle("hide",!!q);
+  $("soon").innerHTML="";
+  var s=document.createElement("span");s.textContent=u.soon;$("soon").appendChild(s);
+  SOON[L].forEach(function(x){var c=document.createElement("span");c.className="c serif";c.textContent=x;$("soon").appendChild(c)});
+}
+document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){L=b.dataset.l;try{localStorage.setItem("widu-lang",L)}catch(e){}render()}});
+$("q").oninput=render;
+$("q").onkeydown=function(e){if(e.key==="Enter"){var a=$("grid").firstElementChild;if(a)location.href=a.href}if(e.key==="Escape"){this.value="";render()}};
+
+// theme (same key as the stotram pages)
+function applyTheme(m){
+  var d=m==="dark"||(m!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);
+  root.setAttribute("data-theme",d?"dark":"light");
+}
+var TM="auto";try{TM=localStorage.getItem("widu-theme-mode")||"auto"}catch(e){}
+applyTheme(TM);
+$("theme").onclick=function(){
+  TM=root.getAttribute("data-theme")==="dark"?"light":"dark";
+  try{localStorage.setItem("widu-theme-mode",TM)}catch(e){}applyTheme(TM);
+};
+render();
+</script>
+</body>
+</html>

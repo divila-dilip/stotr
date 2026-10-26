@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lalita Sahasranamam – Telugu Stanza Viewer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Telugu:wght@400;700&display=swap">
+<style>
+:root{--pri:#0B57D0;--bg:#F1F3F4;--paper:#FFFFFF;--tx:#1E1E1E;--tx2:#5E5E5E;--neu:#E8EAED;--err:#D32F2F;--div:#E0E0E0;--onpri:#fff;--hov:#0A47A6;--bd:#BDBDBD;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--pri:#8AB4F8;--bg:#1F1F1F;--paper:#2B2B2B;--tx:#FFFFFF;--tx2:#B0B0B0;--neu:#424242;--err:#FF6B6B;--div:#404040;--onpri:#1F1F1F;--hov:#7CA8E8;--bd:#424242;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 14px/1.5 Inter,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--paper);border-bottom:1px solid var(--div)}
+header h1{font-size:18px;font-weight:600;margin:0;line-height:1.3;flex:1}
+button,input{font:500 14px Inter,sans-serif}
+button{background:var(--pri);color:var(--onpri);border:0;border-radius:20px;padding:8px 16px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+button:hover{background:var(--hov)}
+button:disabled{background:var(--neu);color:#BDBDBD;box-shadow:none;cursor:default}
+button.sec{background:var(--neu);color:var(--tx)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+#jump{width:84px;padding:8px;border:2px solid var(--bd);border-radius:8px;background:var(--paper);color:var(--tx)}
+#jump:focus{border-color:var(--pri);outline:0}
+#jump.bad{border-color:var(--err);color:var(--err)}
+.layout{display:flex}
+nav{width:280px;flex:none;height:calc(100vh - 57px);overflow-y:auto;position:sticky;top:57px;background:var(--paper);border-right:1px solid var(--div);padding:8px}
+nav button{display:block;width:100%;text-align:left;background:none;color:var(--tx);border-radius:8px;box-shadow:none;padding:8px;font-weight:400}
+nav button small{display:block;color:var(--tx2);font-size:12px}
+nav button.on{background:var(--neu);border-left:3px solid var(--pri);font-weight:600}
+main{flex:1;padding:24px 16px;max-width:900px;margin:0 auto;min-width:0}
+.card{background:var(--paper);border:1px solid var(--div);border-radius:12px;padding:24px}
+.meta{color:var(--tx2);font-size:12px;margin:0 0 8px}
+h2{font-size:24px;line-height:1.3;margin:0 0 16px;font-weight:600}
+h3{font-size:18px;margin:24px 0 8px;font-weight:600;line-height:1.3}
+.sl{font:700 24px/1.9 "Noto Sans Telugu",sans-serif;margin:0;text-align:center;padding:16px;background:var(--bg);border-radius:8px}
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.w{border:1px solid var(--div);border-radius:8px;padding:8px}
+.w b{font-family:"Noto Sans Telugu",sans-serif;display:block}
+.w span{color:var(--tx2);font-size:12px}
+.ctl{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.ctl button{min-width:110px}
+#jump{margin-left:auto}
+#sp{display:none;position:fixed;top:calc(57px + env(safe-area-inset-top,0px));left:0;right:0;z-index:7;background:var(--paper);border-bottom:1px solid var(--div);padding:8px 16px;max-height:70vh;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+#sp.open{display:block}
+#q{width:100%;padding:8px;border:2px solid var(--bd);border-radius:8px;background:var(--paper);color:var(--tx);font:400 16px "Noto Sans Telugu",Inter,sans-serif}
+#q:focus{border-color:var(--pri);outline:0}
+#res button{display:block;width:100%;text-align:left;background:none;color:var(--tx);box-shadow:none;border-radius:8px;padding:8px;font:400 14px "Noto Sans Telugu",Inter,sans-serif}
+#res button small{display:block;color:var(--tx2);font:400 12px Inter,sans-serif}
+#res button:hover{background:var(--neu)}
+@media(max-width:1024px){.ctl{position:fixed;left:0;right:0;bottom:0;z-index:4;margin:0;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));background:var(--paper);border-top:1px solid var(--div)}main{padding-bottom:88px}}
+.mt{font-family:"Noto Sans Telugu",sans-serif;line-height:1.8}
+.note{color:var(--tx2);font-style:italic}
+#menu{display:none}
+@media(max-width:1024px){
+ #menu{display:inline-block}
+ nav{display:none;position:fixed;top:calc(57px + env(safe-area-inset-top,0px));left:0;bottom:0;height:auto;z-index:6;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+ nav.open{display:block}
+ header h1{font-size:14px}
+}
+@media(max-width:600px){.sl{font-size:20px}h1{display:none}header h1{display:none}}
+
+/* v2.1 additions */
+:root{--saf:#E65100}
+:root[data-theme="dark"]{--saf:#FFB74D}
+.sl{overflow-wrap:anywhere;word-break:break-word;white-space:normal;max-width:100%;font-size:clamp(18px,4.6vw,24px)}
+.card{min-width:0;position:relative}
+body.saf .sl{color:var(--saf)}
+#saf .dot{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--saf);vertical-align:middle;border:2px solid var(--tx2)}
+#saf[aria-pressed="true"]{outline:2px solid var(--saf)}
+.ov{padding:0;min-width:0;width:22px;height:22px;border-radius:50%;margin-left:6px;font-size:13px;line-height:22px;vertical-align:middle}
+.modal{display:none;position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.mbox{background:var(--paper);color:var(--tx);border-radius:12px;padding:24px;max-width:560px;width:100%;max-height:80vh;overflow:auto;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.mbox h2{font-size:20px;margin:0 0 4px}
+.mbox .te{color:var(--tx2);font-family:"Noto Sans Telugu",sans-serif;margin:0 0 12px}
+.mbox p#ovb{line-height:1.6;margin:0 0 16px}
+/* v2.2 realistic page turn */
+#stage{position:relative;perspective:2400px;perspective-origin:50% 40%}
+#slide{box-shadow:1px 1px 0 var(--paper),2px 2px 0 var(--div),3px 3px 0 var(--paper),4px 4px 0 var(--div),6px 8px 14px rgba(0,0,0,.12)}
+.leaf{position:absolute;left:0;top:0;transform-style:preserve-3d;pointer-events:none;z-index:3}
+.strip{position:absolute;top:0;transform-origin:0 50%;transform-style:preserve-3d;will-change:transform}
+.face{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{transform:rotateY(180deg);background:var(--paper) linear-gradient(90deg,rgba(0,0,0,.05),transparent 40%)}
+.pg{position:absolute;top:0;margin:0}
+.ghost{background:transparent;border-color:transparent;opacity:.08}
+.sh{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+.spine::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.22),transparent 16px);pointer-events:none}
+.cast{position:absolute;inset:0;border-radius:12px;pointer-events:none;z-index:2}
+main{touch-action:pan-y}
+@media(max-width:600px){header{gap:4px;padding:8px}header button{padding:8px 10px}#jump{width:64px}}
+.mbox h3{font-size:15px;margin:14px 0 4px}.mbox p.mt{margin:0 0 4px}
+#ovx{position:sticky;bottom:0;box-shadow:0 0 0 6px var(--paper)}
+#ft{margin:32px 0 8px;text-align:center;color:var(--tx2);font-size:12px}#ft b{color:var(--tx)}#ft button{margin-top:8px}
+/* Lalita Sahasranamam */
+.pm{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+.sm{padding:4px 12px;font-size:12px}
+.st{margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--div);scroll-margin-top:70px}
+.st:last-child{border-bottom:0;margin-bottom:0}
+.sn{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.no{background:var(--neu);border-radius:12px;padding:2px 10px;font-size:12px;font-weight:600;color:var(--tx2)}
+.star{background:none;color:var(--saf);box-shadow:none;padding:2px 8px;font-size:20px;line-height:1}.star:hover{background:none}
+.st .sl{font-size:clamp(17px,4.4vw,21px);line-height:1.8;padding:10px 12px}
+details{margin-top:6px}summary{cursor:pointer;color:var(--pri);font-weight:500;padding:4px 0}
+.st.flash{animation:fl 1.8s}@keyframes fl{0%,60%{background:var(--neu)}100%{background:transparent}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{background:var(--neu);color:var(--tx);box-shadow:none;border-radius:16px;padding:6px 10px;font-size:13px}
+.chips button.on{background:var(--pri);color:var(--onpri)}
+#ixr{width:100%}#ixx{position:sticky;bottom:0;margin-top:16px;box-shadow:0 0 0 6px var(--paper)}
+.no{cursor:pointer;box-shadow:none}.no:hover{background:var(--div);color:var(--tx)}
+.mean{margin-top:6px}.compact .mean{display:none}.compact .st.open .mean{display:block}.compact .st{margin-bottom:8px;padding-bottom:8px}
+.sect{margin:18px 0 8px;font-size:15px;color:var(--pri)}.sect:first-child{margin-top:0}.compact .sect{display:none}
+.fb{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--neu);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+ <button id="ix" class="sec" aria-label="Index and quick jump">☰</button>
+ <h1>శ్రీ లలితా సహస్రనామం · Sri Lalita Sahasranamam </h1>
+ <input id="jump" placeholder="57" aria-label="Jump to stanza number" inputmode="numeric">
+ <button id="go">Go</button>
+ <button id="sbtn" class="sec" aria-label="Search">🔍</button>
+ <div id="sp"><input id="q" placeholder="Search Telugu or English…" aria-label="Search stanzas"><div id="res"></div></div>
+ <button id="snd" class="sec" aria-label="Page-turn sound" aria-pressed="true" title="Page-turn sound">🔊</button>
+ <button id="saf" class="sec" aria-label="Saffron shloka colour (this session only)" aria-pressed="false" title="Saffron shloka colour (this session only)"><span class="dot"></span></button>
+ <button id="theme" class="sec" aria-label="Toggle theme">◐</button>
+</header>
+<div class="layout">
+  <main><div id="stage"><div class="card" id="slide"></div></div>
+  <div class="ctl"><button id="prev">‹ Previous</button><span class="meta" id="pos"></span><button id="next">Next ›</button></div>
+  <footer id="ft"><div>Prepared by: <b>Dilip Raju Divila</b></div><button id="fb" class="sec">✎ Report a mistake / Suggest</button></footer>
+ </main>
+</div>
+<div id="ixm" class="modal" role="dialog" aria-modal="true" aria-labelledby="ixt"><div class="mbox"><h2 id="ixt">Index · సూచిక</h2><h3 id="ixsl"></h3><input type="range" id="ixr" min="1" value="1" aria-label="Scrub through stanzas"><div id="ixth"></div><div id="ixsec"></div><h3>Bookmarks · గుర్తులు</h3><div id="ixbm" class="chips"></div><h3>Pages · పేజీలు</h3><div id="ixpg" class="chips"></div><h3>Stanzas per page</h3><div id="ixpp" class="chips"></div><button id="ixx">Close</button></div></div>
+<script>
+// Stanza data. Key = stanza number. Fields: t = Telugu stanza lines, mt = Telugu meaning, m = English meaning, w = "word=meaning; word=meaning" (optional)
+// Later definitions override earlier ones, so you can correct a stanza by adding it again below.
+var TOTAL=182,                       // total stanzas (raise it if you also include the phalashruti)
+SEC=[
+  ["మహారాజ్ఞి వైభవం · Majesty and weapons",1],["కేశాదిపాదాంత వర్ణన · Head-to-foot description",4],["నివాసం · Abode",22],["భండాసుర సంహారం · The Bhandasura battle",24],["పంచదశీ మంత్ర స్వరూపం · Mantra form",34],["కులమార్గం, కుండలిని · Kula path and Kundalini",37],["భక్తి, అనుగ్రహం · Devotion and grace",41],["నిర్గుణ స్వరూపం · The attributeless Goddess",44],["సర్వ స్వరూపం · The Goddess as All",52],["మహా నామాలు · The Great (Maha) names",54],["విద్యలు, సౌందర్యం · Vidyas and loveliness",59],["చిన్మయానందం · Consciousness and bliss",61],
+  ["అవస్థలు, పంచకృత్యాలు · States of consciousness and the five acts",62],["లోకమాత · Mother of all the worlds",65],["హ్రీంకారం, సౌందర్యం, కరుణ · Hrim, beauty and compassion",70],
+  ["లీలా విలాసం · Beauty and play",74],["క్షేత్రం, భక్తానుగ్రహం · The Kshetra and grace to devotees",76],["చిత్స్వరూపం, వాక్కులు · Consciousness and the four levels of speech",80],["పీఠాలు, ఉపాసన · Seats and worship",82],
+  ["ప్రకృతి స్వరూపం · Prakriti and Vidya",86],["శివ సంబంధం · Her bond with Shiva",88],["గాయత్రి, తత్త్వం · Gayatri and the tattvas",90],["కౌలం, మత్తు ఆనందం · Kaula worship and bliss",92],["అనుగ్రహ శక్తులు · Graces and attendant powers",94],
+  ["షట్చక్ర యోగినీ దేవతలు · The Yoginis of the six chakras",98],
+  ["స్మృతి, పుణ్యం, విద్య · Smriti, merit and Vidya",110],["కాత్యాయని, మహాప్రళయం · Katyayani and the great dissolution",113],["కైలాసం, శ్రీవిద్య · Kailasa and Sri Vidya",117],
+  ["ఆదిశక్తి మహిమ · Her cosmic sovereignty",122],["మంత్ర బీజాలు, ఉమా గౌరి · Seed syllables and Gauri",125],["జ్ఞానం, యోగం · Knowledge, yoga and the three Shaktis",127],["అద్వైతం, బ్రహ్మానందం · Non-duality and the bliss of Brahman",131],
+  ["సామ్రాజ్యం, సర్వలోక శక్తి · Sovereignty and empire",134],["గురు తత్త్వం, విద్య · The Guru principle and wisdom",137],["ముక్తి, లయం · Liberation and absorption",142],["కృప, రక్షణ · Grace that removes suffering",143],["మహాకాళి, చండిక · Mahakali and Chandika",145],
+  ["త్రిగుణాత్మిక, సర్వలోకేశ్వరి · The three gunas and Queen of all worlds",146],["త్రిపురేశి, పరాపరా · Tripureshi and the transcendent",150],["కళలు, రసం · The arts and sentiments",152],["పరంజ్యోతి, పాశహంత్రి · The Supreme light and the destroyer of bonds",153],["సృష్టి మాత · Mother of creation",155],["ముక్తి, భవచక్రం · Liberation and the wheel of existence",157],
+  ["సారం, ఉపనిషత్తులు · Essence and the Upanishads",158],["ఉద్ధరణ, ధర్మం · The rescuer and upholder of dharma",164],["కులం, నాదం · Kula, sound and the bindu",166],["తత్త్వం, రక్షణ · Tattva and protection",168],
+  ["చైతన్యం, కైవల్యం · Consciousness and kaivalya",170],["విశ్వమాత · Mother of the universe",173],["సువాసిని, ముద్రలు · Suvasini worship and mudras",177],["ముగింపు · The conclusion",181]
+],
+GR=[
+["కేశాదిపాదాంత వర్ణన","Head-to-foot description",[[4,21]]],
+["ముఖ వర్ణన","Face and expression",[[5,12]]],
+["ఆభరణాలు","Ornaments and jewels",[[4,4],[7,8],[13,13],[16,16],[20,21]]],
+["ఆయుధాలు, అస్త్రాలు","Weapons and divine missiles",[[2,3],[31,33]]],
+["భండాసుర యుద్ధం","The Bhandasura battle",[[24,33]]],
+["శక్తి సేనలు, దేవతలు","Armies, Shaktis and attendant goddesses",[[24,30]]],
+["నివాస స్థానాలు","Abode and throne",[[1,1],[22,23]]],
+["మంత్ర స్వరూపం","Mantra form (the Kutas)",[[34,36]]],
+["కుండలిని, చక్రాలు","Kundalini and the chakras",[[37,40]]],
+["భక్తి, అనుగ్రహం","Devotion and grace",[[41,43]]],
+["నిర్గుణ స్వరూపం","The attributeless Goddess",[[44,49]]],
+["దోష నాశనం","Destroyer of faults and passions",[[46,48]]],
+["దుఃఖహరణ, కరుణ","Remover of sorrow, full of compassion",[[50,51]]],
+["యంత్ర, మంత్ర, తంత్ర","Yantra, mantra and tantra",[[52,53],[56,56]]],
+["మహా నామాలు","The great (Maha) names",[[53,58]]],
+["విద్యలు, కళలు","Vidyas and arts",[[58,59]]],
+["అవస్థలు, పంచకృత్యాలు","States of consciousness and the five acts",[[62,64]]],
+["త్రిమూర్తులు, దేవతలు","Trimurti and the gods",[[63,65],[69,69]]],
+["లోకమాత","Mother of all the worlds",[[66,69]]],
+["సౌందర్యం, కరుణ","Beauty and compassion",[[71,73]]],
+["వాక్కు స్వరూపం","Speech and its four levels",[[77,77],[81,81]]],
+["భక్తానుగ్రహం","Grace to devotees and relief from distress",[[78,79]]],
+["పీఠాలు, ఉపాసన","Seats and modes of worship",[[82,84]]],
+["ప్రకృతి, విద్య","Prakriti and Vidya",[[86,87]]],
+["శివ సంబంధం","Her bond with Shiva",[[88,89]]],
+["గాయత్రి, తత్త్వం","Gayatri and the tattvas",[[90,91]]],
+["కులమార్గం","The Kula path",[[37,37],[93,93]]],
+["అనుగ్రహ శక్తులు","Graces and attendant powers",[[94,97]]],
+["షట్చక్ర యోగినీ దేవతలు","The Yoginis of the six chakras",[[98,109]]],
+["విద్య, శ్రీవిద్య","Vidya and Sri Vidya",[[112,112],[118,118]]],
+["కాలం, ప్రళయం, మృత్యువు","Time, dissolution and death",[[112,113],[115,115]]],
+["ఆదిశక్తి మహిమ","Her cosmic sovereignty and motherhood",[[122,124]]],
+["జ్ఞానం, వేదాంతం, యోగం","Knowledge, Vedanta and yoga",[[127,130]]],
+["అద్వైతం, బ్రహ్మానందం","Non-duality and the bliss of Brahman",[[131,133]]],
+["రాజ్యం, సామ్రాజ్యం","Kingdoms and empire",[[134,136]]],
+["గురు తత్త్వం, శివజ్ఞానం","The Guru principle and Shiva-knowledge",[[138,140]]],
+["పాపం, రోగం, మృత్యువు నివారణ","Remover of sin, disease, old age and death",[[143,144]]],
+["పరతత్త్వం","The Supreme principle",[[149,150],[153,153]]],
+["కళలు, రసం","The arts and sentiments",[[151,152]]],
+["పాశ ఛేదనం, ముక్తి","Cutter of bonds, giver of liberation",[[153,153],[157,157]]],
+["సృష్టి మాత","Mother of creation",[[155,156]]],
+["పుష్పాలు","Flowers dear to the Goddess",[[4,4],[7,8],[73,73],[92,92],[147,148]]],
+["వేద, ఉపనిషత్ సారం","Essence of the Vedas, scriptures and mantras",[[158,159]]],
+["యజ్ఞం, ధర్మం, ధనం","Sacrifice, dharma and wealth",[[164,165]]],
+["తత్త్వం, ఆత్మజ్ఞానం","Tattva and Self-knowledge",[[163,163],[167,168]]],
+["ఆపద నివారణ, ఉద్ధరణ","Rescuer from distress and worldly sorrow",[[159,159],[164,164],[169,169]]],
+["పంచ నామాలు","The five-fold names",[[174,175]]],
+["ముద్రలు, పూజ","Mudras and worship",[[178,180]]],
+["ముగింపు","The conclusion",[[181,183]]]
+ ],
+ PP=10,SHOWM=false,BM=[],S=1,FOCUS=0,LST=null,FIL=-1;
+var D={
+"1":{t:["శ్రీమాతా శ్రీమహారాజ్ఞీ శ్రీమత్సింహాసనేశ్వరీ |","చిదగ్నికుణ్డసమ్భూతా దేవకార్యసముద్యతా ||"],mt:"మంగళకరమైన తల్లి; మహా సామ్రాజ్ఞి; శ్రేష్ఠమైన సింహాసనాన్ని అధిష్ఠించిన రాణి; చైతన్యమనే అగ్నికుండం నుండి ఉద్భవించినది; దేవతల కార్యం కోసం సిద్ధంగా ఉన్నది.",m:"The auspicious Mother; the great Empress; the Queen seated on the glorious lion throne; born from the fire-pit of pure consciousness; ever engaged in the work of the gods."},
+"2":{t:["ఉద్యద్భానుసహస్రాభా చతుర్బాహుసమన్వితా |","రాగస్వరూపపాశాఢ్యా క్రోధాకారాఙ్కుశోజ్జ్వలా ||"],mt:"ఉదయించే వేయి సూర్యుల కాంతి గలది; నాలుగు చేతులు గలది; రాగం (ప్రేమ) అనే పాశాన్ని ధరించినది; క్రోధం అనే అంకుశంతో ప్రకాశించేది.",m:"Radiant like a thousand rising suns; four-armed; holding the noose of love (raga); shining with the goad in the form of anger (krodha)."},
+"3":{t:["మనోరూపేక్షుకోదణ్డా పఞ్చతన్మాత్రసాయకా |","నిజారుణప్రభాపూరమజ్జద్బ్రహ్మాణ్డమణ్డలా ||"],mt:"మనస్సే చెరకు విల్లుగా గలది; ఐదు తన్మాత్రలే బాణాలుగా గలది; తన ఎర్రని కాంతి ప్రవాహంలో బ్రహ్మాండమండలాన్ని ముంచెత్తేది.",m:"Whose sugarcane bow is the mind; whose arrows are the five subtle elements; in whose flood of crimson radiance the whole universe is immersed."},
+"4":{t:["చమ్పకాశోకపున్నాగసౌగన్ధికలసత్కచా |","కురువిన్దమణిశ్రేణీకనత్కోటీరమణ్డితా ||"],mt:"సంపెంగ, అశోకం, పున్నాగ, సౌగంధిక పూలతో ప్రకాశించే కురులు గలది; కురువింద మణుల వరుసలతో మెరిసే కిరీటంతో అలంకరించబడినది.",m:"With tresses fragrant with champaka, ashoka, punnaga and saugandhika flowers; adorned with a crown of kuruvinda gems."},
+"5":{t:["అష్టమీచన్ద్రవిభ్రాజదలికస్థలశోభితా |","ముఖచన్ద్రకలఙ్కాభమృగనాభివిశేషకా ||"],mt:"అష్టమి చంద్రునిలా ప్రకాశించే నుదురు గలది; ముఖచంద్రునిపై మచ్చలా కనిపించే కస్తూరి తిలకం గలది.",m:"Her forehead shines like the eighth-day moon; the musk mark on her face is like the spot on the moon."},
+"6":{t:["వదనస్మరమాఙ్గల్యగృహతోరణచిల్లికా |","వక్త్రలక్ష్మీపరీవాహచలన్మీనాభలోచనా ||"],mt:"ముఖమనే మన్మథ మంగళగృహానికి తోరణాల వంటి కనుబొమలు గలది; ముఖ సౌందర్య ప్రవాహంలో ఆడే చేపల వంటి కన్నులు గలది.",m:"Her eyebrows are the festive arches at the auspicious home of her face; her eyes are like fish darting in the stream of her beauty."},
+"7":{t:["నవచమ్పకపుష్పాభనాసాదణ్డవిరాజితా |","తారాకాన్తితిరస్కారినాసాభరణభాసురా ||"],mt:"కొత్తగా విరిసిన సంపెంగ పువ్వులాంటి నాసిక గలది; నక్షత్ర కాంతిని మించే ముక్కుపుడకతో ప్రకాశించేది.",m:"Her nose is like a fresh champaka bud; her nose-ring outshines the stars."},
+"8":{t:["కదమ్బమఞ్జరీక్లృప్తకర్ణపూరమనోహరా |","తాటఙ్కయుగలీభూతతపనోడుపమణ్డలా ||"],mt:"కడిమి పూగుత్తులతో చేసిన చెవి అలంకరణతో మనోహరమైనది; సూర్యచంద్రులే రెండు చెవి తాటంకాలుగా గలది.",m:"Charming with earrings of kadamba blossoms; the sun and moon are her two ear-ornaments."},
+"9":{t:["పద్మరాగశిలాదర్శపరిభావికపోలభూః |","నవవిద్రుమబిమ్బశ్రీన్యక్కారిరదనచ్ఛదా ||"],mt:"పద్మరాగమణి అద్దాన్ని మించే నునుపైన చెంపలు గలది; కొత్త పగడాన్ని, దొండపండును తిరస్కరించే అరుణ అధరాలు గలది.",m:"Her cheeks outshine a mirror of ruby; her lips put fresh coral and bimba fruit to shame."},
+"10":{t:["శుద్ధవిద్యాఙ్కురాకారద్విజపఙ్క్తిద్వయోజ్జ్వలా |","కర్పూరవీటికామోదసమాకర్షిదిగన్తరా ||"],mt:"శుద్ధవిద్య అంకురాల వంటి రెండు వరుసల దంతాలతో ప్రకాశించేది; కర్పూర తాంబూలపు సువాసనతో దిక్కులను ఆకర్షించేది.",m:"Her two rows of teeth shine like buds of pure knowledge; the scent of her camphor-betel fills all directions."},
+"11":{t:["నిజసల్లాపమాధుర్యవినిర్భర్త్సితకచ్ఛపీ |","మన్దస్మితప్రభాపూరమజ్జత్కామేశమానసా ||"],mt:"తన మధుర సంభాషణతో సరస్వతి వీణ నాదాన్ని మించినది; మందహాస కాంతి ప్రవాహంలో కామేశ్వరుని మనసును ముంచెత్తేది.",m:"Her sweet speech shames the veena of Sarasvati; the flood of her gentle smile drowns the mind of Kameshvara."},
+"12":{t:["అనాకలితసాదృశ్యచిబుకశ్రీవిరాజితా |","కామేశబద్ధమాఙ్గల్యసూత్రశోభితకన్ధరా ||"],mt:"సాటిలేని సొగసైన గడ్డంతో ప్రకాశించేది; కామేశ్వరుడు కట్టిన మంగళసూత్రంతో శోభించే కంఠం గలది.",m:"Her chin is peerless in beauty; her neck is adorned with the auspicious thread tied by Kameshvara."},
+"13":{t:["కనకాఙ్గదకేయూరకమనీయభుజాన్వితా |","రత్నగ్రైవేయచిన్తాకలోలముక్తాఫలాన్వితా ||"],mt:"బంగారు అంగదాలు, కేయూరాలతో అందంగా ఉన్న భుజాలు గలది; రత్నహారం, చింతాకు పతకం, కదిలే ముత్యాల సరులతో అలంకరించబడినది.",m:"With lovely arms adorned with golden armlets and bracelets; wearing a jewelled necklace, a chintaka pendant and swaying strings of pearls."},
+"14":{t:["కామేశ్వరప్రేమరత్నమణిప్రతిపణస్తనీ |","నాభ్యాలవాలరోమాలిలతాఫలకుచద్వయీ ||"],mt:"కామేశ్వరుని ప్రేమ అనే రత్నమణికి ప్రతిగా ఇవ్వబడిన స్తనాలు గలది; నాభి అనే పాదులో మొలిచిన రోమావళి అనే తీగకు కాసిన ఫలాల వంటి రెండు వక్షోజాలు గలది.",m:"Whose breasts are given in exchange for the jewel of Kameshvara's love; whose two breasts are like fruits of the creeper of fine hair rising from the basin of her navel."},
+"15":{t:["లక్ష్యరోమలతాధారతాసమున్నేయమధ్యమా |","స్తనభారదలన్మధ్యపట్టబన్ధవలిత్రయా ||"],mt:"రోమరేఖ అనే తీగకు ఆధారంగా మాత్రమే ఊహించదగిన సన్నని నడుము గలది; స్తనాల బరువుతో విరిగిపోకుండా కట్టిన పట్టీలా నడుముపై మూడు ముడతలు గలది.",m:"Her waist is so slender that it is known only as the support of the line of hair; the three folds at her waist are like a band protecting it from the weight of her breasts."},
+"16":{t:["అరుణారుణకౌసుమ్భవస్త్రభాస్వత్కటీతటీ |","రత్నకిఙ్కిణికారమ్యరశనాదామభూషితా ||"],mt:"ఎర్రని కుసుంభ రంగు వస్త్రంతో ప్రకాశించే కటి ప్రదేశం గలది; రత్నాల చిరుగంటలతో రమ్యమైన ఒడ్డాణంతో అలంకరించబడినది.",m:"Her hips shine in a garment of deep red safflower hue; adorned with a lovely girdle hung with tiny jewelled bells."},
+"17":{t:["కామేశజ్ఞాతసౌభాగ్యమార్దవోరుద్వయాన్వితా |","మాణిక్యమకుటాకారజానుద్వయవిరాజితా ||"],mt:"కామేశ్వరునికి మాత్రమే తెలిసిన సౌభాగ్యం, మృదుత్వం గల రెండు తొడలు గలది; మాణిక్య కిరీటాల వంటి రెండు మోకాళ్లతో ప్రకాశించేది.",m:"Her two thighs, whose beauty and softness are known only to Kameshvara; her knees shine like crowns of rubies."},
+"18":{t:["ఇన్ద్రగోపపరిక్షిప్తస్మరతూణాభజఙ్ఘికా |","గూఢగుల్ఫా కూర్మపృష్ఠజయిష్ణుప్రపదాన్వితా ||"],mt:"ఇంద్రగోప పురుగులతో కప్పబడిన మన్మథుని అమ్ములపొదుల వంటి పిక్కలు గలది; కనిపించని చీలమండలు, తాబేలు వీపును మించిన పాదాగ్రాలు గలది.",m:"Her calves are like Kama's quivers covered with ruby-red velvet insects; her ankles are hidden and the arches of her feet surpass the back of a tortoise."},
+"19":{t:["నఖదీధితిసఞ్ఛన్ననమజ్జనతమోగుణా |","పదద్వయప్రభాజాలపరాకృతసరోరుహా ||"],mt:"గోళ్ల కాంతితో నమస్కరించేవారి తమోగుణాన్ని తొలగించేది; రెండు పాదాల కాంతి సమూహంతో కమలాలను తిరస్కరించేది.",m:"The radiance of her toenails dispels the darkness (tamas) of those who bow to her; the glow of her feet puts lotuses to shame."},
+"20":{t:["సిఞ్జానమణిమఞ్జీరమణ్డితశ్రీపదామ్బుజా |","మరాలీమన్దగమనా మహాలావణ్యశేవధిః ||"],mt:"ఝణఝణలాడే మణి నూపురాలతో అలంకరించబడిన శ్రీపాద పద్మాలు గలది; ఆడ హంసలా మెల్లగా నడిచేది; గొప్ప లావణ్యానికి నిధి.",m:"Her lotus feet are adorned with tinkling jewelled anklets; she walks gently like a swan; she is the treasure-house of great loveliness."},
+"21":{t:["సర్వారుణానవద్యాఙ్గీ సర్వాభరణభూషితా |","శివకామేశ్వరాఙ్కస్థా శివా స్వాధీనవల్లభా ||"],mt:"అంతా అరుణవర్ణంతో, నిర్దోషమైన అంగాలతో ఉన్నది; సర్వాభరణాలు ధరించినది; శివకామేశ్వరుని ఒడిలో కూర్చున్నది; మంగళస్వరూపిణి; భర్తను తన వశంలో ఉంచుకున్నది.",m:"Wholly crimson, with flawless limbs; adorned with every ornament; seated on the lap of Shiva-Kameshvara; the auspicious Shiva; she holds her Lord under her sway."},
+"22":{t:["సుమేరుమధ్యశృఙ్గస్థా శ్రీమన్నగరనాయికా |","చిన్తామణిగృహాన్తస్థా పఞ్చబ్రహ్మాసనస్థితా ||"],mt:"మేరు పర్వత మధ్య శిఖరంపై ఉన్నది; శ్రీనగరానికి అధినాయిక; చింతామణి గృహంలో నివసించేది; పంచబ్రహ్మాసనంపై ఆసీనురాలైనది.",m:"Dwelling on the central peak of Mount Meru; the ruler of Sri Nagara; within the Chintamani house; seated on the seat of the five Brahmas."},
+"23":{t:["మహాపద్మాటవీసంస్థా కదమ్బవనవాసినీ |","సుధాసాగరమధ్యస్థా కామాక్షీ కామదాయినీ ||"],mt:"మహాపద్మాల అడవిలో ఉన్నది; కడిమి వనంలో నివసించేది; అమృత సముద్రం మధ్యలో ఉన్నది; కామాక్షి; కోరికలను తీర్చేది.",m:"Dwelling in a forest of great lotuses; living in the kadamba grove; in the midst of the ocean of nectar; Kamakshi, the fulfiller of desires."},
+"24":{t:["దేవర్షిగణసఙ్ఘాతస్తూయమానాత్మవైభవా |","భణ్డాసురవధోద్యుక్తశక్తిసేనాసమన్వితా ||"],mt:"దేవతలు, ఋషుల సమూహాలు స్తుతించే మహిమ గలది; భండాసురుని వధకు సిద్ధమైన శక్తిసేనలతో కూడినది.",m:"Whose glory is praised by hosts of gods and sages; accompanied by an army of Shaktis ready to slay the demon Bhandasura."},
+"25":{t:["సమ్పత్కరీసమారూఢసిన్ధురవ్రజసేవితా |","అశ్వారూఢాధిష్ఠితాశ్వకోటికోటిభిరావృతా ||"],mt:"సంపత్కరీ దేవి నడిపే ఏనుగుల గుంపులచే సేవించబడేది; అశ్వారూఢా దేవి అధిష్ఠించిన కోట్లాది కోట్ల గుర్రాలచే చుట్టుముట్టబడినది.",m:"Served by herds of elephants led by Sampatkari; surrounded by crores upon crores of horses commanded by Ashvarudha."},
+"26":{t:["చక్రరాజరథారూఢసర్వాయుధపరిష్కృతా |","గేయచక్రరథారూఢమన్త్రిణీపరిసేవితా ||"],mt:"చక్రరాజమనే రథంపై ఆసీనురాలై సర్వాయుధాలతో అలంకరించబడినది; గేయచక్ర రథంపై ఉన్న మంత్రిణి (శ్యామల)చే సేవించబడేది.",m:"Seated on the Chakraraja chariot, equipped with every weapon; attended by Mantrini (Shyamala) riding the Geyachakra chariot."},
+"27":{t:["కిరిచక్రరథారూఢదణ్డనాథాపురస్కృతా |","జ్వాలామాలినికాక్షిప్తవహ్నిప్రాకారమధ్యగా ||"],mt:"కిరిచక్ర రథంపై ఉన్న దండనాథ (వారాహి)చే ముందుండి నడిపించబడేది; జ్వాలామాలినీ దేవి ఏర్పరచిన అగ్ని ప్రాకారం మధ్యలో ఉన్నది.",m:"Led forward by Dandanatha (Varahi) on the Kirichakra chariot; stationed in the midst of the wall of fire created by Jvalamalini."},
+"28":{t:["భణ్డసైన్యవధోద్యుక్తశక్తివిక్రమహర్షితా |","నిత్యాపరాక్రమాటోపనిరీక్షణసముత్సుకా ||"],mt:"భండాసురుని సైన్యాన్ని వధించడానికి సిద్ధమైన శక్తుల పరాక్రమానికి ఆనందించేది; నిత్యాదేవతల పరాక్రమ విజృంభణను చూడాలని ఉత్సాహపడేది.",m:"Delighted by the valour of the Shaktis bent on destroying Bhanda's army; eager to watch the splendid prowess of the Nitya goddesses."},
+"29":{t:["భణ్డపుత్రవధోద్యుక్తబాలావిక్రమనన్దితా |","మన్త్రిణ్యమ్బావిరచితవిషఙ్గవధతోషితా ||"],mt:"భండాసురుని కుమారులను వధించడానికి సిద్ధమైన బాలాదేవి పరాక్రమానికి ఆనందించినది; మంత్రిణీ దేవి విషంగుని సంహరించినందుకు సంతోషించినది.",m:"Pleased by the valour of Bala who set out to slay Bhanda's sons; gratified by Mantrini's slaying of Vishanga."},
+"30":{t:["విశుక్రప్రాణహరణవారాహీవీర్యనన్దితా |","కామేశ్వరముఖాలోకకల్పితశ్రీగణేశ్వరా ||"],mt:"విశుక్రుని ప్రాణాలు హరించిన వారాహి శౌర్యానికి ఆనందించినది; కామేశ్వరుని ముఖాన్ని చూసి శ్రీ గణేశ్వరుని సృష్టించినది.",m:"Delighted by Varahi's prowess in taking the life of Vishukra; she created Sri Ganesha merely by glancing at the face of Kameshvara."},
+"31":{t:["మహాగణేశనిర్భిన్నవిఘ్నయన్త్రప్రహర్షితా |","భణ్డాసురేన్ద్రనిర్ముక్తశస్త్రప్రత్యస్త్రవర్షిణీ ||"],mt:"మహాగణేశుడు విఘ్నయంత్రాన్ని ఛేదించినందుకు సంతోషించినది; భండాసురుడు వదిలిన శస్త్రాలకు ప్రతిగా ప్రత్యస్త్రాలను కురిపించేది.",m:"Rejoicing when Maha Ganesha shattered the obstruction-yantra; showering counter-weapons against those hurled by Bhandasura."},
+"32":{t:["కరాఙ్గులినఖోత్పన్ననారాయణదశాకృతిః |","మహాపాశుపతాస్త్రాగ్నినిర్దగ్ధాసురసైనికా ||"],mt:"తన చేతివేళ్ల గోళ్ల నుండి నారాయణుని పది అవతారాలను సృష్టించినది; మహాపాశుపతాస్త్రాగ్నితో రాక్షస సైనికులను దహించినది.",m:"From the nails of her fingers she brought forth the ten forms (avatars) of Narayana; she burnt up the demon soldiers with the fire of the Mahapashupata weapon."},
+"33":{t:["కామేశ్వరాస్త్రనిర్దగ్ధసభణ్డాసురశూన్యకా |","బ్రహ్మోపేన్ద్రమహేన్ద్రాదిదేవసంస్తుతవైభవా ||"],mt:"కామేశ్వరాస్త్రంతో భండాసురునితో పాటు శూన్యక నగరాన్ని దహించినది; బ్రహ్మ, ఉపేంద్ర, మహేంద్రాది దేవతలు స్తుతించే వైభవం గలది.",m:"With the Kameshvara weapon she burnt up Bhandasura along with his city Shunyaka; her glory is praised by Brahma, Upendra, Mahendra and other gods."},
+"34":{t:["హరనేత్రాగ్నిసన్దగ్ధకామసఞ్జీవనౌషధిః |","శ్రీమద్వాగ్భవకూటైకస్వరూపముఖపఙ్కజా ||"],mt:"శివుని నేత్రాగ్నిచే దహించబడిన మన్మథుని తిరిగి బ్రతికించే ఔషధి; శ్రీమద్వాగ్భవ కూటమే స్వరూపంగా గల ముఖ పద్మం గలది.",m:"The life-restoring herb for Kama, burnt by the fire of Shiva's eye; her lotus face is the Vagbhava Kuta of the Panchadashi mantra."},
+"35":{t:["కణ్ఠాధఃకటిపర్యన్తమధ్యకూటస్వరూపిణీ |","శక్తికూటైకతాపన్నకట్యధోభాగధారిణీ ||"],mt:"కంఠం నుండి కటి వరకు ఉన్న మధ్యభాగం మధ్యకూట స్వరూపమైనది; కటి కింది భాగం శక్తికూటంతో ఏకమై ఉన్నది.",m:"Her body from the throat to the waist is the Madhya Kuta; her form below the waist is one with the Shakti Kuta."},
+"36":{t:["మూలమన్త్రాత్మికా మూలకూటత్రయకలేబరా |","కులామృతైకరసికా కులసఙ్కేతపాలినీ ||"],mt:"మూలమంత్ర స్వరూపిణి; మూడు కూటాలే శరీరంగా గలది; కులామృతాన్ని ఆస్వాదించేది; కుల సంకేతాలను కాపాడేది.",m:"The embodiment of the root mantra; her body is the three Kutas; she delights in the nectar of the Kula path; guardian of the Kula conventions."},
+"37":{t:["కులాఙ్గనా కులాన్తస్థా కౌలినీ కులయోగినీ |","అకులా సమయాన్తస్థా సమయాచారతత్పరా ||"],mt:"కులమార్గపు కులాంగన; కులానికి అంతమున ఉన్నది; కౌలినీ, కులయోగినీ రూపాలు గలది; కులానికి అతీతమైన అకులా; సమయమార్గపు అంత్యంలో ఉండేది; సమయాచార నిష్ఠ గలది.",m:"The lady of the Kula path, abiding at the end of Kula; the Kaulini and Kula-yogini; Akula, beyond all Kula; abiding at the end of the Samaya path and devoted to Samayachara worship."},
+"38":{t:["మూలాధారైకనిలయా బ్రహ్మగ్రన్థివిభేదినీ |","మణిపూరాన్తరుదితా విష్ణుగ్రన్థివిభేదినీ ||"],mt:"మూలాధారమే ఏకైక నివాసంగా గలది; బ్రహ్మగ్రంథిని భేదించేది; మణిపూర చక్రంలో ఉదయించేది; విష్ణుగ్రంథిని భేదించేది.",m:"Whose one abode is the Muladhara; who pierces the Brahma knot; who rises in the Manipura; who pierces the Vishnu knot."},
+"39":{t:["ఆజ్ఞాచక్రాన్తరాలస్థా రుద్రగ్రన్థివిభేదినీ |","సహస్రారామ్బుజారూఢా సుధాసారాభివర్షిణీ ||"],mt:"ఆజ్ఞాచక్ర మధ్యంలో ఉండి రుద్రగ్రంథిని భేదించేది; సహస్రార కమలంపై ఆసీనురాలై అమృతధారలను కురిపించేది.",m:"Who dwells within the Ajna chakra and pierces the Rudra knot; who, seated on the thousand-petalled lotus, showers streams of nectar."},
+"40":{t:["తడిల్లతాసమరుచిః షట్చక్రోపరిసంస్థితా |","మహాశక్తిః కుణ్డలినీ బిసతన్తుతనీయసీ ||"],mt:"మెరుపు తీగ వంటి కాంతి గలది; షట్చక్రాల పైన నెలకొన్నది; సర్వోన్నతమైన గొప్ప శక్తి స్వరూపిణి; కుండలినీ శక్తి; తామర నూలు కంటే సూక్ష్మమైనది.",m:"Radiant like a streak of lightning; established above the six chakras; Mahashakti, the supreme and great power; the Kundalini; finer than a lotus fibre."},
+"41":{t:["భవానీ భావనాగమ్యా భవారణ్యకుఠారికా |","భద్రప్రియా భద్రమూర్తిర్భక్తసౌభాగ్యదాయినీ ||"],mt:"భవుని (శివుని) భార్య భవానీ; భావనతోనే పొందదగినది; సంసారారణ్యానికి గొడ్డలి వంటిది; మంగళప్రియ; మంగళమూర్తి; భక్తులకు సౌభాగ్యాన్నిచ్చేది.",m:"Bhavani, consort of Bhava; attained only through contemplation; the axe that cuts the forest of worldly existence; fond of the auspicious; of auspicious form; the giver of good fortune to devotees."},
+"42":{t:["భక్తిప్రియా భక్తిగమ్యా భక్తివశ్యా భయాపహా |","శామ్భవీ శారదారాధ్యా శర్వాణీ శర్మదాయినీ ||"],mt:"భక్తిని ఇష్టపడేది; భక్తితో పొందదగినది; భక్తికి వశమయ్యేది; భయాన్ని తొలగించేది; శంభుని శక్తి; శారదాదేవిచే ఆరాధించబడేది; శర్వుని భార్య; సుఖాన్ని ఇచ్చేది.",m:"Fond of devotion; reached through devotion; won over by devotion; the remover of fear; Shambhavi, Shakti of Shambhu; worshipped by Sharada; Sharvani, consort of Sharva; the giver of happiness."},
+"43":{t:["శాఙ్కరీ శ్రీకరీ సాధ్వీ శరచ్చన్ద్రనిభాననా |","శాతోదరీ శాన్తిమతీ నిరాధారా నిరఞ్జనా ||"],mt:"శంకరుని శక్తి; సంపదను కలిగించేది; సాధ్వి; శరత్కాల చంద్రునివలె ప్రకాశించే ముఖం గలది; సన్నని ఉదరం గలది; శాంతి గలది; ఆధారం అవసరం లేనిది; మాలిన్యం లేనిది.",m:"Shankari, Shakti of Shankara; the bestower of prosperity; the virtuous lady; her face like the autumn moon; slender-waisted; full of peace; needing no support; stainless."},
+"44":{t:["నిర్లేపా నిర్మలా నిత్యా నిరాకారా నిరాకులా |","నిర్గుణా నిష్కలా శాన్తా నిష్కామా నిరుపప్లవా ||"],mt:"అంటుపడనిది; నిర్మలమైనది; నిత్యమైనది; ఆకారం లేనిది; కలవరం లేనిది; గుణాలకు అతీతమైనది; అవయవాలు లేనిది; శాంతమైనది; కోరికలు లేనిది; ఉపద్రవాలు లేనిది.",m:"Untouched; pure; eternal; formless; undisturbed; beyond the qualities; without parts; peaceful; free of desire; free of calamity."},
+"45":{t:["నిత్యముక్తా నిర్వికారా నిష్ప్రపఞ్చా నిరాశ్రయా |","నిత్యశుద్ధా నిత్యబుద్ధా నిరవద్యా నిరన్తరా ||"],mt:"ఎల్లప్పుడూ ముక్తురాలైనది; వికారాలు లేనిది; ప్రపంచానికి అతీతమైనది; ఆశ్రయం అవసరం లేనిది; నిత్యశుద్ధమైనది; నిత్యజ్ఞాన స్వరూపిణి; నిందలేనిది; అంతరం (అంతరాయం) లేనిది.",m:"Ever liberated; unchanging; beyond the manifest world; needing no support; ever pure; ever aware; blameless; without any gap."},
+"46":{t:["నిష్కారణా నిష్కలఙ్కా నిరుపాధిర్నిరీశ్వరా |","నీరాగా రాగమథనీ నిర్మదా మదనాశినీ ||"],mt:"కారణం లేనిది; కళంకం లేనిది; ఉపాధులు లేనిది; తనకు పైన ఈశ్వరుడు లేనిది; రాగం (అనురక్తి) లేనిది; రాగాన్ని మథించేది; మదం లేనిది; మదాన్ని నశింపజేసేది.",m:"Without cause; without blemish; without limiting adjuncts; without any lord over her; free of attachment; the destroyer of attachment; free of pride; the destroyer of pride."},
+"47":{t:["నిశ్చిన్తా నిరహఙ్కారా నిర్మోహా మోహనాశినీ |","నిర్మమా మమతాహన్త్రీ నిష్పాపా పాపనాశినీ ||"],mt:"చింత లేనిది; అహంకారం లేనిది; మోహం లేనిది; మోహాన్ని నశింపజేసేది; మమకారం లేనిది; మమకారాన్ని హరించేది; పాపం లేనిది; పాపాలను నశింపజేసేది.",m:"Free of worry; free of ego; free of delusion; the destroyer of delusion; free of possessiveness; the destroyer of possessiveness; sinless; the destroyer of sin."},
+"48":{t:["నిష్క్రోధా క్రోధశమనీ నిర్లోభా లోభనాశినీ |","నిఃసంశయా సంశయఘ్నీ నిర్భవా భవనాశినీ ||"],mt:"క్రోధం లేనిది; క్రోధాన్ని శమింపజేసేది; లోభం లేనిది; లోభాన్ని నశింపజేసేది; సంశయం లేనిది; సంశయాలను తొలగించేది; జన్మ లేనిది; సంసారాన్ని నశింపజేసేది.",m:"Free of anger; the calmer of anger; free of greed; the destroyer of greed; free of doubt; the remover of doubt; free of birth; the destroyer of worldly existence."},
+"49":{t:["నిర్వికల్పా నిరాబాధా నిర్భేదా భేదనాశినీ ।","నిర్నాశా మృత్యుమథనీ నిష్క్రియా నిష్పరిగ్రహా ॥"],mt:"వికల్పాలు లేనిది; బాధ, అడ్డంకులు లేనిది; భేదం లేనిది; భేదభావాన్ని నశింపజేసేది; నాశనం లేనిది; మృత్యువును మథించేది; క్రియ లేనిది; పరిగ్రహం లేనిది.",m:"Free of conceptual thought; free of obstruction; free of difference; the destroyer of difference; free of destruction; the crusher of death; actionless; without possessions."},
+"50":{t:["నిస్తులా నీలచికురా నిరపాయా నిరత్యయా ।","దుర్లభా దుర్గమా దుర్గా దుఃఖహంత్రీ సుఖప్రదా ॥"],mt:"సాటిలేనిది; నల్లని ముంగురులు గలది; నాశనం లేనిది; అంతం లేనిది; పొందడానికి కష్టమైనది; చేరడానికి కష్టమైనది; దుర్గ (దుర్గమమైన దుఃఖాలను నశింపజేసేది); దుఃఖాన్ని హరించేది; సుఖాన్ని ఇచ్చేది.",m:"Incomparable; dark-tressed; free of decay; free of end; hard to attain; hard to reach; Durga, the remover of impassable difficulties; the destroyer of sorrow; the giver of happiness."},
+"51":{t:["దుష్టదూరా దురాచారశమనీ దోషవర్జితా ।","సర్వజ్ఞా సాంద్రకరుణా సమానాధికవర్జితా ॥"],mt:"దుష్టులకు దూరంగా ఉండేది; దుష్ట ఆచారాలను శమింపజేసేది; దోషాలు లేనిది; సర్వజ్ఞురాలు; దట్టమైన కరుణ గలది; తనతో సమానమైనది, తనకంటే అధికమైనది లేనిది.",m:"Far from the wicked; the calmer of evil conduct; free of faults; all-knowing; full of dense compassion; without equal or superior."},
+"52":{t:["సర్వశక్తిమయీ సర్వమఙ్గలా సద్గతిప్రదా |","సర్వేశ్వరీ సర్వమయీ సర్వమన్త్రస్వరూపిణీ ||"],mt:"సర్వశక్తులతో నిండినది; సర్వమంగళ స్వరూపిణి; సద్గతిని ఇచ్చేది; సర్వేశ్వరి; సర్వమయి; సర్వ మంత్రాల స్వరూపిణి.",m:"Full of all powers; all-auspicious; the giver of the good path; the Queen of all; the all-pervading; the embodiment of all mantras."},
+"53":{t:["సర్వయన్త్రాత్మికా సర్వతన్త్రరూపా మనోన్మనీ |","మాహేశ్వరీ మహాదేవీ మహాలక్ష్మీర్మృడప్రియా ||"],mt:"సర్వయంత్రాల ఆత్మ; సర్వతంత్రాల రూపం; మనోన్మని (మనస్సును దాటిన స్థితి); మహేశ్వరుని శక్తి; మహాదేవి; మహాలక్ష్మి; మృడునికి (శివునికి) ప్రియమైనది.",m:"The soul of all yantras; the form of all tantras; Manonmani, the state beyond mind; Maheshvari; Mahadevi; Mahalakshmi; beloved of Mrida (Shiva)."},
+"54":{t:["మహారూపా మహాపూజ్యా మహాపాతకనాశినీ |","మహామాయా మహాసత్త్వా మహాశక్తిర్మహారతిః ||"],mt:"మహారూపం గలది; మహాపూజ్యురాలు; మహాపాతకాలను నశింపజేసేది; మహామాయ; మహాసత్త్వం గలది; మహాశక్తి స్వరూపిణి; మహారతి (గొప్ప ఆనందం) గలది.",m:"Of great form; greatly worshipful; the destroyer of great sins; the great Maya; of great being; the great power; of great delight."},
+"55":{t:["మహాభోగా మహైశ్వర్యా మహావీర్యా మహాబలా |","మహాబుద్ధిర్మహాసిద్ధిర్మహాయోగేశ్వరేశ్వరీ ||"],mt:"మహాభోగాలు గలది; మహైశ్వర్యం గలది; మహావీర్యం గలది; మహాబలం గలది; మహాబుద్ధి గలది; మహాసిద్ధులు గలది; మహాయోగేశ్వరులకు కూడా ఈశ్వరి.",m:"Of great enjoyment; of great sovereignty; of great valour; of great strength; of great intellect; of great accomplishments; the Queen even of the great lords of yoga."},
+"56":{t:["మహాతన్త్రా మహామన్త్రా మహాయన్త్రా మహాసనా |","మహాయాగక్రమారాధ్యా మహాభైరవపూజితా ||"],mt:"మహాతంత్ర స్వరూపిణి; మహామంత్రం; మహాయంత్రం; మహాసనం (గొప్ప ఆసనం) గలది; మహాయాగ క్రమంతో ఆరాధించబడేది; మహాభైరవునిచే పూజించబడేది.",m:"The great tantra; the great mantra; the great yantra; seated on a great seat; worshipped through the order of the great sacrifice; worshipped by Mahabhairava."},
+"57":{t:["మహేశ్వరమహాకల్పమహాతాణ్డవసాక్షిణీ |","మహాకామేశమహిషీ మహాత్రిపురసున్దరీ ||"],mt:"మహేశ్వరుని మహాకల్ప (ప్రళయ) మహాతాండవానికి సాక్షిణి; మహాకామేశ్వరుని పట్టమహిషి; మహాత్రిపురసుందరి.",m:"The witness of Maheshvara's great dance at the end of the great cycle; the chief queen of Mahakameshvara; Mahatripurasundari."},
+"58":{t:["చతుఃషష్ట్యుపచారాఢ్యా చతుఃషష్టికలామయీ |","మహాచతుఃషష్టికోటియోగినీగణసేవితా ||"],mt:"అరవై నాలుగు ఉపచారాలతో ఆరాధించబడేది; అరవై నాలుగు కళల స్వరూపిణి; అరవై నాలుగు కోట్ల యోగినీ గణాలచే సేవించబడేది.",m:"Worshipped with sixty-four offerings; the embodiment of the sixty-four arts; served by sixty-four crore yogini hosts."},
+"59":{t:["మనువిద్యా చన్ద్రవిద్యా చన్ద్రమణ్డలమధ్యగా |","చారురూపా చారుహాసా చారుచన్ద్రకలాధరా ||"],mt:"మనువిద్య, చంద్రవిద్య అనే విద్యా స్వరూపిణి; చంద్రమండలం మధ్యలో ఉండేది; సుందర రూపం, సుందర హాసం గలది; సుందరమైన చంద్రకళను ధరించినది.",m:"She is the Manu-vidya and the Chandra-vidya; abiding in the middle of the moon's orb; of lovely form and smile, bearing the lovely crescent moon."},
+"60":{t:["చరాచరజగన్నాథా చక్రరాజనికేతనా |","పార్వతీ పద్మనయనా పద్మరాగసమప్రభా ||"],mt:"చరాచర జగత్తుకు నాథురాలు; శ్రీచక్రమే నివాసంగా గలది; పార్వతి; కమలాల వంటి కన్నులు గలది; పద్మరాగమణి వంటి కాంతి గలది.",m:"The Lord of the moving and unmoving world; whose abode is the Sri Chakra; Parvati; lotus-eyed; shining like a ruby."},
+"61":{t:["పఞ్చప్రేతాసనాసీనా పఞ్చబ్రహ్మస్వరూపిణీ |","చిన్మయీ పరమానన్దా విజ్ఞానఘనరూపిణీ ||"],mt:"ఐదుగురు ప్రేతాసనాలపై ఆసీనురాలైనది; పంచబ్రహ్మ స్వరూపిణి; చిన్మయి (చైతన్యమయి); పరమానంద రూపిణి; ఘనీభవించిన విజ్ఞాన స్వరూపిణి.",m:"Seated on the seat of the five Pretas; the form of the five Brahmas; full of consciousness; supreme bliss; the essence of concentrated knowledge."},
+"62":{t:["ధ్యానధ్యాతృధ్యేయరూపా ధర్మాధర్మవివర్జితా |","విశ్వరూపా జాగరిణీ స్వపన్తీ తైజసాత్మికా ||"],mt:"ధ్యానం, ధ్యాత, ధ్యేయం ఈ మూడూ తానే; ధర్మాధర్మాలకు అతీతమైనది; జాగ్రదావస్థలో విశ్వరూపిణి, ఎల్లప్పుడూ మేల్కొని ఉండేది; స్వప్నావస్థలో తైజసాత్మిక.",m:"Meditation, meditator and the meditated are all herself; beyond right and wrong; the waking-state Vishva form, ever awake; dreaming; the Taijasa self of the dream state."},
+"63":{t:["సుప్తా ప్రాజ్ఞాత్మికా తుర్యా సర్వావస్థావివర్జితా |","సృష్టికర్త్రీ బ్రహ్మరూపా గోప్త్రీ గోవిన్దరూపిణీ ||"],mt:"సుషుప్తిలో ప్రాజ్ఞాత్మిక; తురీయ స్థితి; అన్ని అవస్థలకు అతీతమైనది; సృష్టికర్త్రి; బ్రహ్మరూప; రక్షించేది; గోవిందరూపిణి.",m:"The deep-sleep Prajna self; the fourth state (Turiya); beyond all states; the creator; of the form of Brahma; the protector; of the form of Govinda."},
+"64":{t:["సంహారిణీ రుద్రరూపా తిరోధానకరీశ్వరీ |","సదాశివానుగ్రహదా పఞ్చకృత్యపరాయణా ||"],mt:"సంహారిణి; రుద్రరూపిణి; తిరోధానం (కప్పివేయడం) చేసే ఈశ్వరి; సదాశివునికి అనుగ్రహాన్ని ఇచ్చేది; సృష్టి, స్థితి, లయ, తిరోధానం, అనుగ్రహం అనే ఐదు కృత్యాలలో నిమగ్నమైనది.",m:"The dissolver; of the form of Rudra; the Queen who veils; the giver of grace as Sadashiva; ever engaged in the five acts (creation, preservation, dissolution, concealment, grace)."},
+"65":{t:["భానుమణ్డలమధ్యస్థా భైరవీ భగమాలినీ |","పద్మాసనా భగవతీ పద్మనాభసహోదరీ ||"],mt:"సూర్యమండల మధ్యంలో ఉన్నది; భైరవి; భగమాలిని (నిత్యాదేవత); పద్మాసనంపై ఆసీనురాలు; భగవతి; పద్మనాభుని (విష్ణువు) సహోదరి.",m:"Abiding in the middle of the sun's orb; Bhairavi; Bhagamalini; seated on a lotus; Bhagavati; sister of Padmanabha (Vishnu)."},
+"66":{t:["ఉన్మేషనిమిషోత్పన్నవిపన్నభువనావలిః |","సహస్రశీర్షవదనా సహస్రాక్షీ సహస్రపాత్ ||"],mt:"ఆమె కన్ను తెరవడంతో లోకాల సమూహం పుట్టి, రెప్ప వాల్చడంతో లయమవుతుంది; వేయి శిరస్సులు, ముఖాలు, కన్నులు, పాదాలు గలది.",m:"By the opening of her eyes the worlds are born and by their closing they dissolve; thousand-headed, thousand-faced, thousand-eyed and thousand-footed."},
+"67":{t:["ఆబ్రహ్మకీటజననీ వర్ణాశ్రమవిధాయినీ |","నిజాజ్ఞారూపనిగమా పుణ్యాపుణ్యఫలప్రదా ||"],mt:"బ్రహ్మ నుండి చిన్న పురుగు వరకు అన్నిటికీ తల్లి; వర్ణాశ్రమ ధర్మాలను విధించేది; తన ఆజ్ఞయే వేదాలుగా గలది; పుణ్యపాపాల ఫలాలను ఇచ్చేది.",m:"Mother of all, from Brahma down to the smallest insect; the ordainer of the duties of the orders of life; whose command is the Vedas; the giver of the fruits of merit and demerit."},
+"68":{t:["శ్రుతిసీమన్తసిన్దూరీకృతపాదాబ్జధూలికా |","సకలాగమసన్దోహశుక్తిసమ్పుటమౌక్తికా ||"],mt:"వేదాలు తమ పాపిటలో సిందూరంగా ధరించే పాదపద్మ ధూళి గలది; సకల ఆగమాల సమూహమనే ముత్యపు చిప్పలోని ముత్యం.",m:"The dust of whose lotus feet is the vermilion in the parting of the Vedas' hair; the pearl in the oyster-shell of all the Agamas."},
+"69":{t:["పురుషార్థప్రదా పూర్ణా భోగినీ భువనేశ్వరీ |","అమ్బికానాదినిధనా హరిబ్రహ్మేన్ద్రసేవితా ||"],mt:"పురుషార్థాలను ఇచ్చేది; పూర్ణ; భోగినీ; భువనేశ్వరి; ఆదిఅంతాలు లేని అంబిక; హరి, బ్రహ్మ, ఇంద్రులచే సేవించబడేది.",m:"The giver of the aims of life; the complete; the enjoyer; Bhuvaneshvari; Ambika, without beginning or end; served by Hari, Brahma and Indra."},
+"70":{t:["నారాయణీ నాదరూపా నామరూపవివర్జితా |","హ్రీఙ్కారీ హ్రీమతీ హృద్యా హేయోపాదేయవర్జితా ||"],mt:"నారాయణి; నాదస్వరూపిణి; నామరూపాలు లేనిది; హ్రీంకార స్వరూపిణి; హ్రీమతి (హ్రీం బీజం గలది, లజ్జాశీలి); హృదయానికి ఆహ్లాదకరమైనది; విడిచిపెట్టదగినవి, స్వీకరించదగినవి లేనిది.",m:"Narayani; of the form of primordial sound; without name and form; the Hrim syllable itself; possessing Hrim and modesty; dear to the heart; with nothing to reject and nothing to accept."},
+"71":{t:["రాజరాజార్చితా రాజ్ఞీ రమ్యా రాజీవలోచనా |","రఞ్జనీ రమణీ రస్యా రణత్కిఙ్కిణిమేఖలా ||"],mt:"రాజాధిరాజులచే పూజించబడేది; రాజ్ఞి; రమణీయమైనది; తామరపూల వంటి కన్నులు గలది; ఆనందింపజేసేది; రమణి; రసస్వరూపిణి; మ్రోగే చిరుగంటల ఒడ్డాణం గలది.",m:"Worshipped by the king of kings; the Queen; lovely; lotus-eyed; the delighter; the charming; the embodiment of rasa; wearing a girdle of tinkling bells."},
+"72":{t:["రమా రాకేన్దువదనా రతిరూపా రతిప్రియా |","రక్షాకరీ రాక్షసఘ్నీ రామా రమణలమ్పటా ||"],mt:"రమా (లక్ష్మీ స్వరూపం); పూర్ణచంద్రుని వంటి ముఖం గలది; రతీదేవి రూపం; రతిప్రియ; రక్షణ ఇచ్చేది; రాక్షసులను సంహరించేది; రామా (సుందరి); తన పతి పట్ల అనురక్తి గలది.",m:"Rama (Lakshmi); her face like the full moon; of the form of Rati; fond of delight; the protector; the slayer of demons; the beautiful; devoted to her Lord."},
+"73":{t:["కామ్యా కామకలారూపా కదమ్బకుసుమప్రియా |","కల్యాణీ జగతీకన్దా కరుణారససాగరా ||"],mt:"కోరదగినది; కామకళా స్వరూపిణి; కడిమి పూలంటే ఇష్టమైనది; కల్యాణి; జగత్తుకు మూలం; కరుణా రస సాగరం.",m:"Desirable; the form of the Kamakala; fond of kadamba flowers; the auspicious; the root of the world; an ocean of the sentiment of compassion."},
+"74":{t:["కలావతీ కలాలాపా కాన్తా కాదమ్బరీప్రియా |","వరదా వామనయనా వారుణీమదవిహ్వలా ||"],mt:"అనేక కళలు గలది; మధురంగా మాట్లాడేది; ప్రియమైనది; కదంబ పుష్పాల మధువు (కాదంబరి) ఇష్టమైనది; వరాలిచ్చేది; అందమైన కన్నులు గలది; వారుణి (ఆనంద రసం) మత్తులో పరవశించేది.",m:"Possessed of the arts; of sweet speech; the beloved; fond of kadambari nectar; the boon-giver; beautiful-eyed; overcome with the intoxication of Varuni, the wine of bliss."},
+"75":{t:["విశ్వాధికా వేదవేద్యా వింధ్యాచలనివాసినీ |","విధాత్రీ వేదజననీ విష్ణుమాయా విలాసినీ ||"],mt:"విశ్వానికి అతీతమైనది; వేదాల ద్వారా తెలుసుకోదగినది; వింధ్యాచలంపై నివసించేది; సృష్టిని విధించేది; వేదాలకు తల్లి; విష్ణుమాయ; లీలలాడేది.",m:"Greater than the universe; known through the Vedas; dwelling on the Vindhya mountain; the ordainer; mother of the Vedas; the Maya of Vishnu; the playful one."},
+"76":{t:["క్షేత్రస్వరూపా క్షేత్రేశీ క్షేత్రక్షేత్రజ్ఞపాలినీ |","క్షయవృద్ధివినిర్ముక్తా క్షేత్రపాలసమర్చితా ||"],mt:"క్షేత్ర (శరీర) స్వరూపిణి; క్షేత్రానికి ఈశ్వరి; క్షేత్రాన్ని, క్షేత్రజ్ఞుని పాలించేది; క్షయం, వృద్ధి లేనిది; క్షేత్రపాలకులచే పూజించబడేది.",m:"Of the form of the field (the body); the mistress of the field; the guardian of both the field and its knower; free of decay and growth; worshipped by the guardians of the field."},
+"77":{t:["విజయా విమలా వన్ద్యా వన్దారుజనవత్సలా |","వాగ్వాదినీ వామకేశీ వహ్నిమణ్డలవాసినీ ||"],mt:"విజయ స్వరూపిణి; నిర్మలమైనది; వందనీయురాలు; నమస్కరించేవారిపై వాత్సల్యం గలది; వాక్కును ప్రేరేపించేది; అందమైన కురులు గలది; అగ్నిమండలంలో నివసించేది.",m:"Victory itself; stainless; worthy of salutation; affectionate to those who bow to her; the one who inspires speech; of beautiful tresses; dwelling in the orb of fire."},
+"78":{t:["భక్తిమత్కల్పలతికా పశుపాశవిమోచనీ |","సంహృతాశేషపాషణ్డా సదాచారప్రవర్తికా ||"],mt:"భక్తులకు కల్పలత వంటిది; జీవుల పశుపాశాలను (బంధాలను) విడిపించేది; వేద విరుద్ధ మార్గాలన్నిటినీ నశింపజేసేది; సదాచారాన్ని ప్రవర్తింపజేసేది.",m:"The wish-fulfilling creeper of devotees; the one who frees souls from the bonds of ignorance; the destroyer of all false doctrines; the establisher of right conduct."},
+"79":{t:["తాపత్రయాగ్నిసన్తప్తసమాహ్లాదనచన్ద్రికా |","తరుణీ తాపసారాధ్యా తనుమధ్యా తమోఽపహా ||"],mt:"తాపత్రయమనే అగ్నితో కాలేవారికి చల్లని వెన్నెల వంటిది; నిత్య యౌవనవతి; తపస్వులచే ఆరాధించబడేది; సన్నని నడుము గలది; అజ్ఞానాంధకారాన్ని హరించేది.",m:"The cooling moonlight for those scorched by the fire of the three kinds of sorrow; the ever-youthful; worshipped by ascetics; slender-waisted; the remover of the darkness of ignorance."},
+"80":{t:["చితిస్తత్పదలక్ష్యార్థా చిదేకరసరూపిణీ |","స్వాత్మానన్దలవీభూతబ్రహ్మాద్యానన్దసన్తతిః ||"],mt:"చైతన్య స్వరూపిణి; 'తత్' పదం యొక్క లక్ష్యార్థం; చైతన్యమే ఏకైక రసంగా గలది; తన ఆత్మానందంలోని ఒక కణమే బ్రహ్మాది దేవతల ఆనంద పరంపరగా మారినది.",m:"Pure consciousness; the true meaning of the word 'That'; whose one essence is consciousness; a tiny drop of whose own bliss becomes the stream of joy of Brahma and others."},
+"81":{t:["పరా ప్రత్యక్చితీరూపా పశ్యన్తీ పరదేవతా |","మధ్యమా వైఖరీరూపా భక్తమానసహంసికా ||"],mt:"పరా వాక్కు; అంతర్ముఖ చైతన్య రూపం; పశ్యంతీ వాక్కు; పరదేవత; మధ్యమా వాక్కు; వైఖరీ వాక్కు; భక్తుల మనస్సనే సరస్సులో విహరించే హంస.",m:"Para, the supreme speech; the inward-turned consciousness; Pashyanti; the supreme deity; Madhyama; of the form of Vaikhari; the swan in the lake of the devotees' minds."},
+"82":{t:["కామేశ్వరప్రాణనాడీ కృతజ్ఞా కామపూజితా |","శృఙ్గారరససమ్పూర్ణా జయా జాలన్ధరస్థితా ||"],mt:"కామేశ్వరుని ప్రాణనాడి; కృతజ్ఞత గలది; మన్మథునిచే పూజించబడేది; శృంగార రసంతో నిండినది; జయ; జాలంధర పీఠంలో ఉన్నది.",m:"The life-current of Kameshvara; the grateful; worshipped by Kama; full of the sentiment of love; Jaya; established in the Jalandhara seat."},
+"83":{t:["ఓడ్యాణపీఠనిలయా బిన్దుమణ్డలవాసినీ |","రహోయాగక్రమారాధ్యా రహస్తర్పణతర్పితా ||"],mt:"ఓడ్యాణ పీఠంలో నివసించేది; బిందుమండలంలో ఉండేది; రహస్య యాగ క్రమంతో ఆరాధించబడేది; రహస్య తర్పణంతో తృప్తి చెందేది.",m:"Dwelling in the Odyana seat; residing in the Bindu mandala; worshipped by the secret order of sacrifice; pleased by secret oblations."},
+"84":{t:["సద్యఃప్రసాదినీ విశ్వసాక్షిణీ సాక్షివర్జితా |","షడఙ్గదేవతాయుక్తా షాడ్గుణ్యపరిపూరితా ||"],mt:"వెంటనే ప్రసన్నమయ్యేది; విశ్వానికి సాక్షి; తనకు సాక్షి లేనిది; షడంగ దేవతలతో కూడినది; షాడ్గుణ్యంతో (ఆరు ఐశ్వర్య గుణాలతో) పరిపూర్ణమైనది.",m:"Quickly gracious; the witness of the universe; herself without any witness; accompanied by the six limb-deities; filled with the six divine attributes."},
+"85":{t:["నిత్యక్లిన్నా నిరుపమా నిర్వాణసుఖదాయినీ |","నిత్యాషోడశికారూపా శ్రీకణ్ఠార్ధశరీరిణీ ||"],mt:"ఎల్లప్పుడూ ద్రవించే కరుణ గలది; సాటిలేనిది; నిర్వాణ సుఖాన్ని ఇచ్చేది; నిత్యా దేవతలలో పదహారవది (నిత్యాషోడశిక); శ్రీకంఠుని (శివుని) అర్ధ శరీరం గలది.",m:"Ever-moist with compassion; incomparable; the giver of the bliss of liberation; the sixteenth Nitya goddess; sharing half the body of Shrikantha (Shiva)."},
+"86":{t:["ప్రభావతీ ప్రభారూపా ప్రసిద్ధా పరమేశ్వరీ |","మూలప్రకృతిరవ్యక్తా వ్యక్తావ్యక్తస్వరూపిణీ ||"],mt:"ప్రభ (తేజస్సు) గలది; ప్రభారూపిణి; సుప్రసిద్ధురాలు; పరమేశ్వరి; మూల ప్రకృతి; అవ్యక్తురాలు; వ్యక్తమూ అవ్యక్తమూ అయిన స్వరూపం గలది.",m:"Possessed of radiance; of the form of radiance; renowned; the supreme Goddess; the root Prakriti; unmanifest; both manifest and unmanifest in nature."},
+"87":{t:["వ్యాపినీ వివిధాకారా విద్యావిద్యాస్వరూపిణీ |","మహాకామేశనయనకుముదాహ్లాదకౌముదీ ||"],mt:"సర్వత్రా వ్యాపించేది; అనేక ఆకారాలు గలది; విద్య, అవిద్య రెండూ తన స్వరూపాలుగా గలది; మహాకామేశ్వరుని నేత్రాలనే కలువలకు ఆనందం కలిగించే వెన్నెల.",m:"All-pervading; of many forms; the very form of both knowledge and ignorance; the moonlight that delights the lily-eyes of Mahakameshvara."},
+"88":{t:["భక్తహార్దతమోభేదభానుమద్భానుసన్తతిః |","శివదూతీ శివారాధ్యా శివమూర్తిః శివఙ్కరీ ||"],mt:"భక్తుల హృదయంలోని అజ్ఞానాంధకారాన్ని ఛేదించే సూర్యకిరణాల సమూహం; శివుని దూతిక; శివునిచే ఆరాధించబడేది; శివ స్వరూపిణి; మంగళాన్ని కలిగించేది.",m:"The sun's rays that dispel the darkness in devotees' hearts; the messenger of Shiva; worshipped by Shiva; of the form of Shiva; the bestower of auspiciousness."},
+"89":{t:["శివప్రియా శివపరా శిష్టేష్టా శిష్టపూజితా |","అప్రమేయా స్వప్రకాశా మనోవాచామగోచరా ||"],mt:"శివునికి ప్రియమైనది; శివునియందే నిష్ఠ గలది; సజ్జనులకు ఇష్టమైనది; సజ్జనులచే పూజించబడేది; కొలవలేనిది; స్వయం ప్రకాశం గలది; మనస్సు, వాక్కులకు అందనిది.",m:"Dear to Shiva; devoted wholly to Shiva; beloved of the righteous; worshipped by the righteous; immeasurable; self-luminous; beyond the reach of mind and speech."},
+"90":{t:["చిచ్ఛక్తిశ్చేతనారూపా జడశక్తిర్జడాత్మికా |","గాయత్రీ వ్యాహృతిః సన్ధ్యా ద్విజబృన్దనిషేవితా ||"],mt:"చైతన్య శక్తి; చేతనా రూపం; జడశక్తి; జడాత్మిక (జడ ప్రకృతి రూపం); గాయత్రి; వ్యాహృతి; సంధ్య; ద్విజుల సమూహంచే సేవించబడేది.",m:"The power of consciousness; of conscious form; the inert power; the soul of the inert; Gayatri; Vyahriti; Sandhya; served by the hosts of the twice-born."},
+"91":{t:["తత్త్వాసనా తత్త్వమయీ పఞ్చకోశాన్తరస్థితా |","నిఃసీమమహిమా నిత్యయౌవనా మదశాలినీ ||"],mt:"తత్త్వాలే ఆసనంగా గలది; తత్త్వమయి; పంచకోశాల అంతరంగంలో ఉన్నది; అపరిమిత మహిమ గలది; నిత్య యౌవనవతి; ఆనంద మత్తు గలది.",m:"Whose seat is the principles (tattvas); made of the tattvas; abiding within the five sheaths; of limitless glory; ever young; glowing with the intoxication of bliss."},
+"92":{t:["మదఘూర్ణితరక్తాక్షీ మదపాటలగణ్డభూః |","చన్దనద్రవదిగ్ధాఙ్గీ చామ్పేయకుసుమప్రియా ||"],mt:"ఆనంద మత్తుతో కదిలే ఎర్రని కన్నులు గలది; మత్తుతో గులాబీ రంగులో మెరిసే చెంపలు గలది; చందనపు ద్రవంతో అలదిన అవయవాలు గలది; సంపెంగ పూలంటే ఇష్టమైనది.",m:"Her red eyes rolling in bliss; her cheeks rosy with intoxication; her limbs smeared with sandal paste; fond of champaka flowers."},
+"93":{t:["కుశలా కోమలాకారా కురుకుల్లా కులేశ్వరీ |","కులకుణ్డాలయా కౌలమార్గతత్పరసేవితా ||"],mt:"నేర్పరి; మృదువైన ఆకారం గలది; కురుకుల్లా దేవి; కులేశ్వరి; కులకుండంలో నివసించేది; కౌల మార్గంలో నిష్ఠ గలవారిచే సేవించబడేది.",m:"Skilful; of tender form; Kurukulla; Queen of the Kula; dwelling in the Kula-kunda; served by those devoted to the Kaula path."},
+"94":{t:["కుమారగణనాథామ్బా తుష్టిః పుష్టిర్మతిర్ధృతిః |","శాన్తిః స్వస్తిమతీ కాన్తిర్నన్దినీ విఘ్ననాశినీ ||"],mt:"కుమారస్వామి, గణపతులకు తల్లి; తృప్తి; పుష్టి; బుద్ధి; ధైర్యం; శాంతి; స్వస్తిమతి (శుభం గలది); కాంతి; ఆనందాన్ని ఇచ్చేది; విఘ్నాలను నశింపజేసేది.",m:"Mother of Kumara and Ganapati; contentment; nourishment; intellect; steadfastness; peace; the auspicious one; radiance; the delighter; the destroyer of obstacles."},
+"95":{t:["తేజోవతీ త్రినయనా లోలాక్షీకామరూపిణీ |","మాలినీ హంసినీ మాతా మలయాచలవాసినీ ||"],mt:"తేజస్సు గలది; మూడు కన్నులు గలది; చంచలమైన కన్నులు గలది; కోరిన రూపం ధరించేది; మాలిని; హంసిని; తల్లి; మలయ పర్వతంపై నివసించేది.",m:"Radiant; three-eyed; of restless eyes; assuming any form at will; Malini; Hamsini; the Mother; dwelling on the Malaya mountain."},
+"96":{t:["సుముఖీ నలినీ సుభ్రూః శోభనా సురనాయికా |","కాలకణ్ఠీ కాన్తిమతీ క్షోభిణీ సూక్ష్మరూపిణీ ||"],mt:"అందమైన ముఖం గలది; తామర వంటిది; అందమైన కనుబొమలు గలది; శోభాయమానమైనది; దేవతల నాయిక; కాలకంఠి (మధురమైన కంఠస్వరం గలది); కాంతిమతి; క్షోభింపజేసేది; సూక్ష్మరూపిణి.",m:"Fair-faced; lotus-like; of beautiful brows; radiant; leader of the gods; Kalakanthi, the sweet-voiced; full of brilliance; the agitator; of subtle form."},
+"97":{t:["వజ్రేశ్వరీ వామదేవీ వయోఽవస్థావివర్జితా |","సిద్ధేశ్వరీ సిద్ధవిద్యా సిద్ధమాతా యశస్వినీ ||"],mt:"వజ్రేశ్వరి; వామదేవి; వయస్సు, అవస్థలు లేనిది; సిద్ధులకు ఈశ్వరి; సిద్ధవిద్యా స్వరూపిణి; సిద్ధులకు తల్లి; కీర్తిమతి.",m:"Vajreshvari; Vamadevi; free of age and stages of life; Queen of the Siddhas; the Siddha-vidya; mother of the Siddhas; the glorious."},
+"98":{t:["విశుద్ధిచక్రనిలయా రక్తవర్ణా త్రిలోచనా |","ఖట్వాఙ్గాదిప్రహరణా వదనైకసమన్వితా ||"],mt:"విశుద్ధి చక్రంలో నివసించేది; ఎర్రని వర్ణం గలది; మూడు కన్నులు గలది; ఖట్వాంగం మొదలైన ఆయుధాలు ధరించేది; ఒక్క ముఖం గలది.",m:"Dwelling in the Vishuddhi chakra; red in colour; three-eyed; wielding the khatvanga and other weapons; single-faced."},
+"99":{t:["పాయసాన్నప్రియా త్వక్స్థా పశులోకభయఙ్కరీ |","అమృతాదిమహాశక్తిసంవృతా డాకినీశ్వరీ ||"],mt:"పాయసాన్నం ఇష్టమైనది; త్వక్ (చర్మ) ధాతువులో ఉన్నది; పశుప్రాయులకు (అజ్ఞానులకు) భయం కలిగించేది; అమృత మొదలైన మహాశక్తులచే చుట్టబడినది; డాకినీ ఈశ్వరి.",m:"Fond of milk-rice; abiding in the skin; terrifying to those of animal nature; surrounded by great Shaktis such as Amrita; Dakinishvari."},
+"100":{t:["అనాహతాబ్జనిలయా శ్యామాభా వదనద్వయా |","దంష్ట్రోజ్జ్వలాఽక్షమాలాదిధరా రుధిరసంస్థితా ||"],mt:"అనాహత చక్రంలో నివసించేది; శ్యామల కాంతి గలది; రెండు ముఖాలు గలది; ప్రకాశించే కోరలు గలది; అక్షమాల మొదలైనవి ధరించేది; రక్త ధాతువులో ఉన్నది.",m:"Dwelling in the Anahata chakra; dark-hued; two-faced; with shining fangs; bearing a rosary and other emblems; abiding in the blood."},
+"101":{t:["కాలరాత్ర్యాదిశక్త్యౌఘవృతా స్నిగ్ధౌదనప్రియా |","మహావీరేన్ద్రవరదా రాకిణ్యమ్బాస్వరూపిణీ ||"],mt:"కాలరాత్రి మొదలైన శక్తుల సమూహంతో చుట్టబడినది; స్నిగ్ధమైన (నెయ్యి కలిపిన) అన్నం ఇష్టమైనది; మహావీరులకు వరాలిచ్చేది; రాకినీ అంబ స్వరూపిణి.",m:"Surrounded by hosts of Shaktis such as Kalaratri; fond of ghee-rice; the boon-giver to great heroes; the form of Mother Rakini."},
+"102":{t:["మణిపూరాబ్జనిలయా వదనత్రయసంయుతా |","వజ్రాదికాయుధోపేతా డామర్యాదిభిరావృతా ||"],mt:"మణిపూర చక్రంలో నివసించేది; మూడు ముఖాలు గలది; వజ్రం మొదలైన ఆయుధాలు గలది; డామరి మొదలైన శక్తులచే చుట్టబడినది.",m:"Dwelling in the Manipura chakra; three-faced; armed with the vajra and other weapons; surrounded by Damari and other Shaktis."},
+"103":{t:["రక్తవర్ణా మాంసనిష్ఠా గుడాన్నప్రీతమానసా |","సమస్తభక్తసుఖదా లాకిన్యమ్బాస్వరూపిణీ ||"],mt:"ఎర్రని వర్ణం గలది; మాంస ధాతువులో ఉన్నది; బెల్లం అన్నం ఇష్టమైనది; సమస్త భక్తులకు సుఖాన్ని ఇచ్చేది; లాకినీ అంబ స్వరూపిణి.",m:"Red in colour; abiding in the flesh; fond of jaggery-rice; the giver of happiness to all devotees; the form of Mother Lakini."},
+"104":{t:["స్వాధిష్ఠానామ్బుజగతా చతుర్వక్త్రమనోహరా |","శూలాద్యాయుధసమ్పన్నా పీతవర్ణాఽతిగర్వితా ||"],mt:"స్వాధిష్ఠాన చక్రంలో ఉన్నది; నాలుగు ముఖాలతో మనోహరమైనది; శూలం మొదలైన ఆయుధాలు గలది; పసుపు వర్ణం గలది; అత్యంత గర్వం (ఆత్మవిశ్వాసం) గలది.",m:"Abiding in the Svadhishthana chakra; charming with four faces; armed with the trident and other weapons; yellow in colour; exceedingly proud."},
+"105":{t:["మేదోనిష్ఠా మధుప్రీతా బన్దిన్యాదిసమన్వితా |","దధ్యన్నాసక్తహృదయా కాకినీరూపధారిణీ ||"],mt:"మేదస్సు ధాతువులో ఉన్నది; మధువు ఇష్టమైనది; బందిని మొదలైన శక్తులతో కూడినది; పెరుగన్నం పట్ల ఆసక్తి గలది; కాకినీ రూపం ధరించినది.",m:"Abiding in the fat; fond of honey; accompanied by Bandini and other Shaktis; with a heart drawn to curd-rice; bearing the form of Kakini."},
+"106":{t:["మూలాధారామ్బుజారూఢా పఞ్చవక్త్రాఽస్థిసంస్థితా |","అఙ్కుశాదిప్రహరణా వరదాదినిషేవితా ||"],mt:"మూలాధార చక్రంలో ఆసీనురాలైనది; ఐదు ముఖాలు గలది; అస్థి ధాతువులో ఉన్నది; అంకుశం మొదలైన ఆయుధాలు గలది; వరద మొదలైన శక్తులచే సేవించబడేది.",m:"Seated in the Muladhara chakra; five-faced; abiding in the bones; armed with the goad and other weapons; served by Varada and other Shaktis."},
+"107":{t:["ముద్గౌదనాసక్తచిత్తా సాకిన్యమ్బాస్వరూపిణీ |","ఆజ్ఞాచక్రాబ్జనిలయా శుక్లవర్ణా షడాననా ||"],mt:"పెసర అన్నం పట్ల ఆసక్తి గలది; సాకినీ అంబ స్వరూపిణి; ఆజ్ఞాచక్రంలో నివసించేది; తెల్లని వర్ణం గలది; ఆరు ముఖాలు గలది.",m:"With a mind fond of mung-bean rice; the form of Mother Sakini; dwelling in the Ajna chakra; white in colour; six-faced."},
+"108":{t:["మజ్జాసంస్థా హంసవతీముఖ్యశక్తిసమన్వితా |","హరిద్రాన్నైకరసికా హాకినీరూపధారిణీ ||"],mt:"మజ్జ ధాతువులో ఉన్నది; హంసవతి మొదలైన ముఖ్య శక్తులతో కూడినది; పసుపు అన్నం పట్ల ప్రీతి గలది; హాకినీ రూపం ధరించినది.",m:"Abiding in the marrow; accompanied by chief Shaktis such as Hamsavati; delighting in turmeric-rice; bearing the form of Hakini."},
+"109":{t:["సహస్రదలపద్మస్థా సర్వవర్ణోపశోభితా |","సర్వాయుధధరా శుక్లసంస్థితా సర్వతోముఖీ ||"],mt:"సహస్రార కమలంలో ఉన్నది; అన్ని వర్ణాలతో శోభించేది; సర్వాయుధాలు ధరించినది; శుక్ల ధాతువులో స్థితి గలది; అన్ని వైపులా ముఖాలు గలది.",m:"Abiding in the thousand-petalled lotus; adorned with all colours; bearing every weapon; established in the shukla essence; faced in every direction."},
+"110":{t:["సర్వౌదనప్రీతచిత్తా యాకిన్యమ్బాస్వరూపిణీ |","స్వాహా స్వధా మతిర్మేధా శ్రుతిః స్మృతిరనుత్తమా ||"],mt:"అన్ని రకాల అన్నాలను ఇష్టపడేది; యాకినీ అంబ స్వరూపిణి; స్వాహా (దేవతలకు హవ్యం చేర్చేది); స్వధా (పితృదేవతలకు ఆహారం చేర్చేది); మతి; మేధ; శ్రుతి; స్మృతి; అనుత్తమ (సాటిలేనిది).",m:"Fond of every kind of rice offering; the form of Mother Yakini; Svaha; Svadha; intellect; wisdom; Shruti; Smriti; the unsurpassed."},
+"111":{t:["పుణ్యకీర్తిః పుణ్యలభ్యా పుణ్యశ్రవణకీర్తనా |","పులోమజార్చితా బన్ధమోచనీ బర్బరాలకా ||"],mt:"పుణ్యకీర్తి గలది; పుణ్యంతో పొందదగినది; ఆమె కథలు వినడం, కీర్తించడం పుణ్యప్రదమైనది; పులోమజ (శచీదేవి)చే పూజించబడేది; బంధాలను విడిపించేది; ఉంగరాల ముంగురులు గలది.",m:"Of meritorious fame; attained through merit; whose hearing and praise are meritorious; worshipped by Pulomaja (Shachi); the liberator from bondage; of curling tresses."},
+"112":{t:["విమర్శరూపిణీ విద్యా వియదాదిజగత్ప్రసూః |","సర్వవ్యాధిప్రశమనీ సర్వమృత్యునివారిణీ ||"],mt:"విమర్శ (స్వయం ప్రకాశ చైతన్యం) రూపిణి; విద్యా స్వరూపిణి; ఆకాశాదులతో కూడిన జగత్తును ప్రసవించేది; సర్వ వ్యాధులను శమింపజేసేది; అన్ని రకాల మృత్యువులను నివారించేది.",m:"Of the form of Vimarsha, self-aware consciousness; knowledge itself; the mother of the world beginning with space; the pacifier of all diseases; the averter of all kinds of death."},
+"113":{t:["అగ్రగణ్యాఽచిన్త్యరూపా కలికల్మషనాశినీ |","కాత్యాయనీ కాలహన్త్రీ కమలాక్షనిషేవితా ||"],mt:"అగ్రగణ్యురాలు; ఊహకు అందని రూపం గలది; కలియుగ దోషాలను నశింపజేసేది; కాత్యాయని; కాలాన్ని (మృత్యువును) హరించేది; కమలాక్షుడైన విష్ణువుచే సేవించబడేది.",m:"First among the foremost; of inconceivable form; the destroyer of the taint of the Kali age; Katyayani; the slayer of Time; served by the lotus-eyed Vishnu."},
+"114":{t:["తామ్బూలపూరితముఖీ దాడిమీకుసుమప్రభా |","మృగాక్షీ మోహినీ ముఖ్యా మృడానీ మిత్రరూపిణీ ||"],mt:"తాంబూలం నిండిన ముఖం గలది; దానిమ్మ పువ్వు వంటి ఎర్రని కాంతి గలది; లేడి వంటి కన్నులు గలది; మోహింపజేసేది; ముఖ్యురాలు; మృడాని (శివుని భార్య); మిత్ర (సూర్య) రూపిణి.",m:"Her mouth filled with betel; glowing like a pomegranate flower; deer-eyed; the enchantress; the chief; Mridani, consort of Shiva; of the form of the Sun, the friend."},
+"115":{t:["నిత్యతృప్తా భక్తనిధిర్నియన్త్రీ నిఖిలేశ్వరీ |","మైత్ర్యాదివాసనాలభ్యా మహాప్రలయసాక్షిణీ ||"],mt:"ఎల్లప్పుడూ తృప్తిగా ఉండేది; భక్తులకు నిధి వంటిది; అందరినీ నియంత్రించేది; సమస్త లోకాలకు ఈశ్వరి; మైత్రి మొదలైన భావనల ద్వారా పొందదగినది; మహాప్రళయానికి సాక్షిణి.",m:"Ever content; the treasure of devotees; the controller of all; Queen of all; attained through qualities such as friendliness; the witness of the great dissolution."},
+"116":{t:["పరాశక్తిః పరానిష్ఠా ప్రజ్ఞానఘనరూపిణీ |","మాధ్వీపానాలసా మత్తా మాతృకావర్ణరూపిణీ ||"],mt:"పరాశక్తి; పరమతత్త్వంలో నిష్ఠ గలది; ఘనీభవించిన ప్రజ్ఞాన స్వరూపిణి; మధు రస సేవనతో మందగమనం గలది; ఆనందంతో పరవశించేది; మాతృకా వర్ణాల (అక్షరాల) రూపం గలది.",m:"The supreme Shakti; established in the Supreme; the embodiment of concentrated wisdom; languid with sweet wine; ecstatic; of the form of the letters of the alphabet (matrika varnas)."},
+"117":{t:["మహాకైలాసనిలయా మృణాలమృదుదోర్లతా |","మహనీయా దయామూర్తిర్మహాసామ్రాజ్యశాలినీ ||"],mt:"మహా కైలాసంలో నివసించేది; తామర తూడు వంటి మృదువైన బాహువులు గలది; గౌరవనీయురాలు; దయామూర్తి; మహా సామ్రాజ్యంతో శోభించేది.",m:"Dwelling on the great Kailasa; her arms soft as lotus stalks; venerable; the embodiment of compassion; adorned with a great empire."},
+"118":{t:["ఆత్మవిద్యా మహావిద్యా శ్రీవిద్యా కామసేవితా |","శ్రీషోడశాక్షరీవిద్యా త్రికూటా కామకోటికా ||"],mt:"ఆత్మవిద్య; మహావిద్య; శ్రీవిద్య; మన్మథునిచే ఆరాధించబడేది; శ్రీషోడశాక్షరీ విద్య; త్రికూట (మూడు కూటాల) స్వరూపిణి; కామకోటి పీఠ నివాసిని.",m:"Atma-vidya; Maha-vidya; Sri-vidya; worshipped by Kama; the sixteen-syllabled Sri vidya; of the three Kutas; abiding at Kamakoti."},
+"119":{t:["కటాక్షకిఙ్కరీభూతకమలాకోటిసేవితా |","శిరఃస్థితా చన్ద్రనిభా భాలస్థేన్ద్రధనుఃప్రభా ||"],mt:"ఆమె కటాక్షానికి సేవకులైన కోట్లాది లక్ష్మీదేవులచే సేవించబడేది; శిరస్సులో (సహస్రారంలో) ఉన్నది; చంద్రుని వంటి కాంతి గలది; నుదుటిపై ఇంద్రధనుస్సు వంటి కాంతి గలది.",m:"Served by crores of Lakshmis made servants by her glance; abiding at the crown of the head; moon-bright; with a rainbow-like radiance on her forehead."},
+"120":{t:["హృదయస్థా రవిప్రఖ్యా త్రికోణాన్తరదీపికా |","దాక్షాయణీ దైత్యహన్త్రీ దక్షయజ్ఞవినాశినీ ||"],mt:"హృదయంలో ఉన్నది; సూర్యుని వంటి కాంతి గలది; త్రికోణం మధ్యలో దీపం వంటిది; దక్షుని కుమార్తె (సతి); రాక్షసులను సంహరించేది; దక్షయజ్ఞాన్ని నాశనం చేసినది.",m:"Abiding in the heart; sun-like; the lamp within the triangle; Dakshayani, daughter of Daksha; the slayer of demons; the destroyer of Daksha's sacrifice."},
+"121":{t:["దరాన్దోలితదీర్ఘాక్షీ దరహాసోజ్జ్వలన్ముఖీ |","గురుమూర్తిర్గుణనిధిర్గోమాతా గుహజన్మభూః ||"],mt:"కొద్దిగా కదులుతున్న దీర్ఘ నేత్రాలు గలది; మందహాసంతో ప్రకాశించే ముఖం గలది; గురుస్వరూపిణి; సద్గుణాల నిధి; గోవులకు తల్లి; గుహుని (కుమారస్వామి) జన్మస్థానం.",m:"Long eyes gently swaying; her face radiant with a slight smile; the form of the Guru; a treasure of virtues; the mother of cows; the birthplace of Guha (Kumara)."},
+"122":{t:["దేవేశీ దణ్డనీతిస్థా దహరాకాశరూపిణీ |","ప్రతిపన్ముఖ్యరాకాన్తతిథిమణ్డలపూజితా ||"],mt:"దేవతల ఈశ్వరి; దండనీతిలో (శిక్షించే నీతిలో) ఉన్నది; దహరాకాశ (హృదయాకాశ) రూపిణి; పాడ్యమి నుండి పూర్ణిమ వరకు తిథిమండలంచే పూజించబడేది.",m:"Queen of the gods; abiding in the justice of punishment (danda-niti); the form of the inner space of the heart; worshipped by the circle of lunar days from the first to the full moon."},
+"123":{t:["కలాత్మికా కలానాథా కావ్యాలాపవినోదినీ |","సచామరరమావాణీసవ్యదక్షిణసేవితా ||"],mt:"కళా స్వరూపిణి; కళలకు అధిపతి; కావ్య సంభాషణ ఇష్టమైనది; చామరాలతో ఎడమ కుడి వైపులా రమా (లక్ష్మి), వాణి (సరస్వతి)లచే సేవించబడేది.",m:"The soul of the arts; Lord of the arts; delighting in poetic conversation; fanned on her left and right by Rama (Lakshmi) and Vani (Sarasvati) with chamaras."},
+"124":{t:["ఆదిశక్తిరమేయాత్మా పరమా పావనాకృతిః |","అనేకకోటిబ్రహ్మాణ్డజననీ దివ్యవిగ్రహా ||"],mt:"ఆదిశక్తి; కొలవలేని ఆత్మ; పరమ; పవిత్ర స్వరూపిణి; అనేక కోట్ల బ్రహ్మాండాలకు తల్లి; దివ్యమైన రూపం గలది.",m:"The primal Shakti; of immeasurable self; the Supreme; of purifying form; mother of crores of universes; of divine form."},
+"125":{t:["క్లీఙ్కారీ కేవలా గుహ్యా కైవల్యపదదాయినీ |","త్రిపురా త్రిజగద్వన్ద్యా త్రిమూర్తిస్త్రిదశేశ్వరీ ||"],mt:"క్లీంకార స్వరూపిణి; కేవలమైనది (అద్వితీయం); గుహ్యమైనది; కైవల్య పదాన్ని ఇచ్చేది; త్రిపుర; మూడు లోకాలచే వందనీయురాలు; త్రిమూర్తి స్వరూపిణి; దేవతల ఈశ్వరి.",m:"The Klim syllable; the absolute; the secret; the giver of the state of kaivalya; Tripura; worthy of salutation by the three worlds; of the form of the Trimurti; Queen of the thirty-three gods."},
+"126":{t:["త్ర్యక్షరీ దివ్యగన్ధాఢ్యా సిన్దూరతిలకాఞ్చితా |","ఉమా శైలేన్ద్రతనయా గౌరీ గన్ధర్వసేవితా ||"],mt:"మూడు అక్షరాల (ఐం క్లీం సౌః) స్వరూపిణి; దివ్య సువాసన గలది; సిందూర తిలకంతో అలంకరించబడినది; ఉమ; హిమవంతుని కుమార్తె; గౌరి; గంధర్వులచే సేవించబడేది.",m:"The three-syllabled one (Aim Klim Sauh); rich in divine fragrance; adorned with a vermilion mark; Uma; daughter of the mountain king; Gauri; served by Gandharvas."},
+"127":{t:["విశ్వగర్భా స్వర్ణగర్భా వరదా వాగధీశ్వరీ |","ధ్యానగమ్యాపరిచ్ఛేద్యా జ్ఞానదా జ్ఞానవిగ్రహా ||"],mt:"విశ్వాన్ని గర్భంలో ధరించేది; హిరణ్యగర్భ స్వరూపిణి; వరాలిచ్చేది; వాక్కులకు అధిదేవత; ధ్యానంతో పొందదగినది; హద్దులతో కొలవలేనిది; జ్ఞానాన్ని ఇచ్చేది; జ్ఞాన స్వరూపిణి.",m:"Holding the universe in her womb; the golden womb; the boon-giver; Queen of speech; reached through meditation; not bounded by limits; the giver of knowledge; the embodiment of knowledge."},
+"128":{t:["సర్వవేదాన్తసంవేద్యా సత్యానన్దస్వరూపిణీ |","లోపాముద్రార్చితా లీలాక్లృప్తబ్రహ్మాణ్డమణ్డలా ||"],mt:"అన్ని వేదాంతాలచే తెలుసుకోదగినది; సత్యానంద స్వరూపిణి; లోపాముద్రచే పూజించబడేది; లీలగా బ్రహ్మాండమండలాన్ని సృష్టించినది.",m:"Known through all the Vedanta; the form of true bliss; worshipped by Lopamudra; who fashioned the sphere of the universe as sport."},
+"129":{t:["అదృశ్యా దృశ్యరహితా విజ్ఞాత్రీ వేద్యవర్జితా |","యోగినీ యోగదా యోగ్యా యోగానన్దా యుగన్ధరా ||"],mt:"కంటికి కనిపించనిది; చూడబడే వస్తువులు లేనిది; తెలుసుకునేది (విజ్ఞాత); తెలుసుకోదగిన వస్తువు లేనిది; యోగిని; యోగాన్ని ఇచ్చేది; యోగ్యురాలు; యోగానంద స్వరూపిణి; యుగాలను ధరించేది.",m:"Unseen; free of anything seen; the knower; free of anything to be known; the Yogini; the giver of yoga; the worthy; the bliss of yoga; the upholder of the ages."},
+"130":{t:["ఇచ్ఛాశక్తిజ్ఞానశక్తిక్రియాశక్తిస్వరూపిణీ |","సర్వాధారా సుప్రతిష్ఠా సదసద్రూపధారిణీ ||"],mt:"ఇచ్ఛాశక్తి, జ్ఞానశక్తి, క్రియాశక్తి స్వరూపిణి; అన్నిటికీ ఆధారం; చక్కగా ప్రతిష్ఠితమైనది; సత్తు, అసత్తు రెండూ రూపాలుగా గలది.",m:"The form of the powers of will, knowledge and action; the support of all; well established; bearing the forms of both being and non-being."},
+"131":{t:["అష్టమూర్తిరజాజైత్రీ లోకయాత్రావిధాయినీ |","ఏకాకినీ భూమరూపా నిర్ద్వైతా ద్వైతవర్జితా ||"],mt:"అష్టమూర్తి (ఎనిమిది రూపాలు గలది); అజ (అవిద్య)ను జయించేది; లోక వ్యవహారాన్ని నడిపించేది; ఏకాకిని; భూమా (అనంత) రూపం గలది; అద్వైతురాలు; ద్వైతభావం లేనిది.",m:"The eight-fold form; the conqueror of Aja (nescience); the ordainer of the course of the worlds; the solitary; of the form of the infinite; non-dual; free of duality."},
+"132":{t:["అన్నదా వసుదా వృద్ధా బ్రహ్మాత్మైక్యస్వరూపిణీ |","బృహతీ బ్రాహ్మణీ బ్రాహ్మీ బ్రహ్మానన్దా బలిప్రియా ||"],mt:"అన్నాన్ని ఇచ్చేది; సంపదను ఇచ్చేది; వృద్ధురాలు (ఆదిమ); బ్రహ్మాత్మైక్య స్వరూపిణి; బృహతి (గొప్పది); బ్రాహ్మణి; బ్రాహ్మి; బ్రహ్మానంద స్వరూపిణి; బలి (పూజోపహారం) ప్రియమైనది.",m:"The giver of food; the giver of wealth; the ancient; the form of the oneness of Brahman and self; the vast; Brahmani; Brahmi; the bliss of Brahman; fond of offerings (bali)."},
+"133":{t:["భాషారూపా బృహత్సేనా భావాభావవివర్జితా |","సుఖారాధ్యా శుభకరీ శోభనా సులభా గతిః ||"],mt:"భాషా రూపం గలది; గొప్ప సేన గలది; భావము, అభావము లేనిది; సులభంగా ఆరాధించదగినది; శుభాన్ని కలిగించేది; శోభాయమానమైనది; సులభంగా పొందదగిన గతి.",m:"Of the form of language; of a great army; beyond being and non-being; easily worshipped; the doer of good; radiant; the easily attainable goal."},
+"134":{t:["రాజరాజేశ్వరీ రాజ్యదాయినీ రాజ్యవల్లభా |","రాజత్కృపా రాజపీఠనివేశితనిజాశ్రితా ||"],mt:"రాజులకు రాజైనవారికి కూడా ఈశ్వరి; రాజ్యాన్ని ఇచ్చేది; రాజ్యానికి ప్రియమైనది (రాజ్య పరిపాలకురాలు); ప్రకాశించే కృప గలది; తన ఆశ్రితులను రాజపీఠంపై ఆసీనులను చేసేది.",m:"Queen even of the kings of kings; the giver of kingdoms; the beloved ruler of the realm; of radiant grace; who seats her devotees on royal thrones."},
+"135":{t:["రాజ్యలక్ష్మీః కోశనాథా చతురఙ్గబలేశ్వరీ |","సామ్రాజ్యదాయినీ సత్యసన్ధా సాగరమేఖలా ||"],mt:"రాజ్యలక్ష్మి; కోశాగారానికి (ధనానికి) అధిపతి; చతురంగ బలాలకు (రథ, గజ, అశ్వ, పదాతి దళాలు) ఈశ్వరి; సామ్రాజ్యాన్ని ఇచ్చేది; సత్య సంకల్పం గలది; సముద్రాలే ఒడ్డాణంగా గలది.",m:"Rajyalakshmi, the prosperity of kingdoms; Lord of the treasury; Queen of the four-fold army; the giver of empire; true to her vow; girdled by the ocean."},
+"136":{t:["దీక్షితా దైత్యశమనీ సర్వలోకవశఙ్కరీ |","సర్వార్థదాత్రీ సావిత్రీ సచ్చిదానన్దరూపిణీ ||"],mt:"దీక్ష పొందినది; రాక్షసులను శమింపజేసేది; సర్వ లోకాలను వశం చేసుకునేది; సర్వ పురుషార్థాలను ఇచ్చేది; సావిత్రి (సృష్టికి మూలమైన శక్తి); సచ్చిదానంద స్వరూపిణి.",m:"The initiated; the subduer of demons; the one who brings all worlds under her sway; the giver of all aims; Savitri; of the form of being-consciousness-bliss."},
+"137":{t:["దేశకాలాపరిచ్ఛిన్నా సర్వగా సర్వమోహినీ |","సరస్వతీ శాస్త్రమయీ గుహామ్బా గుహ్యరూపిణీ ||"],mt:"దేశకాలాలచే పరిమితం కానిది; సర్వవ్యాపి; అందరినీ మోహింపజేసేది; సరస్వతి; శాస్త్రమయి; గుహుని (కుమారస్వామి) తల్లి; గుహ్యమైన (రహస్య) రూపం గలది.",m:"Not limited by place or time; all-pervading; the enchantress of all; Sarasvati; made of the scriptures; mother of Guha; of secret form."},
+"138":{t:["సర్వోపాధివినిర్ముక్తా సదాశివపతివ్రతా |","సమ్ప్రదాయేశ్వరీ సాధ్వీ గురుమణ్డలరూపిణీ ||"],mt:"అన్ని ఉపాధులకు అతీతమైనది; సదాశివునికే అంకితమైన పతివ్రత; సంప్రదాయాలకు ఈశ్వరి; సాధ్వి; గురుపరంపరా మండల రూపిణి.",m:"Free of all limiting adjuncts; the devoted consort of Sadashiva; Queen of the sacred traditions; the virtuous; the form of the circle of Gurus."},
+"139":{t:["కులోత్తీర్ణా భగారాధ్యా మాయా మధుమతీ మహీ |","గణామ్బా గుహ్యకారాధ్యా కోమలాఙ్గీ గురుప్రియా ||"],mt:"కులాన్ని (ఇంద్రియ సముదాయాన్ని) అధిగమించినది; భగునిచే ఆరాధించబడేది; మాయ; మధుమతి; భూమి; గణాలకు తల్లి; గుహ్యకులచే ఆరాధించబడేది; మృదువైన అవయవాలు గలది; గురువులంటే ప్రియమైనది.",m:"Beyond the Kula (the group of senses); worshipped by Bhaga; Maya; Madhumati; the Earth; mother of the Ganas; worshipped by the Guhyakas; soft-limbed; fond of Gurus."},
+"140":{t:["స్వతన్త్రా సర్వతన్త్రేశీ దక్షిణామూర్తిరూపిణీ |","సనకాదిసమారాధ్యా శివజ్ఞానప్రదాయినీ ||"],mt:"స్వతంత్రురాలు; సర్వతంత్రాలకు ఈశ్వరి; దక్షిణామూర్తి రూపిణి; సనకాది మునులచే ఆరాధించబడేది; శివజ్ఞానాన్ని ఇచ్చేది.",m:"Independent; Queen of all tantras; of the form of Dakshinamurti; worshipped by Sanaka and the other sages; the giver of the knowledge of Shiva."},
+"141":{t:["చిత్కలానన్దకలికా ప్రేమరూపా ప్రియఙ్కరీ |","నామపారాయణప్రీతా నన్దివిద్యా నటేశ్వరీ ||"],mt:"చైతన్య కళ, ఆనందపు మొగ్గ స్వరూపిణి; ప్రేమ స్వరూపిణి; ప్రియాన్ని కలిగించేది; నామ పారాయణంతో సంతోషించేది; నంది విద్య; నటేశ్వరి (నటరాజైన శివుని శక్తి).",m:"The bud of the bliss of consciousness; the form of love; the bringer of what is dear; delighted by the recitation of her names; the Nandi-vidya; Natesvari, Shakti of the Lord of dance."},
+"142":{t:["మిథ్యాజగదధిష్ఠానా ముక్తిదా ముక్తిరూపిణీ |","లాస్యప్రియా లయకరీ లజ్జా రమ్భాదివన్దితా ||"],mt:"మిథ్యా జగత్తుకు ఆధారం; ముక్తిని ఇచ్చేది; ముక్తి స్వరూపిణి; లాస్య నృత్యం ఇష్టమైనది; లయాన్ని (ఏకాగ్రతను) కలిగించేది; లజ్జా స్వరూపిణి; రంభ మొదలైన అప్సరసలచే వందనీయురాలు.",m:"The substratum of the seeming world; the giver of liberation; liberation itself; fond of graceful dance; the bringer of absorption (laya); modesty itself; saluted by Rambha and the other celestial dancers."},
+"143":{t:["భవదావసుధావృష్టిః పాపారణ్యదవానలా |","దౌర్భాగ్యతూలవాతూలా జరాధ్వాన్తరవిప్రభా ||"],mt:"సంసార దావాగ్నికి అమృత వర్షం; పాపాల అరణ్యానికి కార్చిచ్చు; దౌర్భాగ్యమనే దూదికి పెనుగాలి; ముసలితనమనే చీకటికి సూర్య కాంతి.",m:"A shower of nectar on the forest-fire of worldly existence; a wildfire in the forest of sin; a whirlwind to the cotton of misfortune; the sun's radiance against the darkness of old age."},
+"144":{t:["భాగ్యాబ్ధిచన్ద్రికా భక్తచిత్తకేకిఘనాఘనా |","రోగపర్వతదమ్భోలిర్మృత్యుదారుకుఠారికా ||"],mt:"భాగ్య సముద్రానికి వెన్నెల; భక్తుల చిత్తాలనే నెమళ్లకు నల్లని మేఘం; రోగాలనే పర్వతానికి వజ్రాయుధం; మృత్యువనే కొయ్యకు గొడ్డలి.",m:"The moonlight to the ocean of good fortune; the dark rain-cloud for the peacock-minds of devotees; the thunderbolt to the mountain of disease; the axe to the timber of death."},
+"145":{t:["మహేశ్వరీ మహాకాలీ మహాగ్రాసా మహాశనా |","అపర్ణా చణ్డికా చణ్డముణ్డాసురనిషూదినీ ||"],mt:"మహేశ్వరి; మహాకాళి; అన్నిటినీ మింగేసే మహాగ్రాసం గలది; మహా భోజనం (సర్వాన్ని ఆరగించేది) గలది; అపర్ణ; చండిక; చండ ముండ అసురులను సంహరించినది.",m:"Maheshvari; Mahakali; of the great devouring; the great eater; Aparna; Chandika; the slayer of the demons Chanda and Munda."},
+"146":{t:["క్షరాక్షరాత్మికా సర్వలోకేశీ విశ్వధారిణీ |","త్రివర్గదాత్రీ సుభగా త్ర్యమ్బకా త్రిగుణాత్మికా ||"],mt:"క్షర (నశించేది), అక్షర (నశించనిది) రెండూ తానే; సర్వలోకాలకు ఈశ్వరి; విశ్వాన్ని ధరించేది; ధర్మార్థకామాలనే త్రివర్గాన్ని ఇచ్చేది; సౌభాగ్యవతి; త్ర్యంబకుని (శివుని) శక్తి; త్రిగుణాత్మిక.",m:"Both the perishable and the imperishable; Queen of all worlds; the upholder of the universe; the giver of the three aims (dharma, artha, kama); the fortunate; Shakti of Tryambaka; made of the three gunas."},
+"147":{t:["స్వర్గాపవర్గదా శుద్ధా జపాపుష్పనిభాకృతిః |","ఓజోవతీ ద్యుతిధరా యజ్ఞరూపా ప్రియవ్రతా ||"],mt:"స్వర్గాన్ని, మోక్షాన్ని ఇచ్చేది; శుద్ధమైనది; జపా (మందార) పుష్పం వంటి ఎర్రని రూపం గలది; ఓజస్సు గలది; తేజస్సును ధరించేది; యజ్ఞ రూపిణి; వ్రతనిష్ఠ ఇష్టమైనది.",m:"The giver of heaven and liberation; pure; her form like the red japa flower; full of vigour; bearing brilliance; of the form of sacrifice; fond of vows."},
+"148":{t:["దురారాధ్యా దురాధర్షా పాటలీకుసుమప్రియా |","మహతీ మేరునిలయా మన్దారకుసుమప్రియా ||"],mt:"ఆరాధించడం కష్టమైనది; ఎదిరించడం కష్టమైనది; పాటలి పూలంటే ఇష్టమైనది; మహతి (గొప్పది); మేరు పర్వతంపై నివసించేది; మందార పూలంటే ఇష్టమైనది.",m:"Hard to worship; hard to overpower; fond of patali flowers; the great; dwelling on Meru; fond of mandara flowers."},
+"149":{t:["వీరారాధ్యా విరాడ్రూపా విరజా విశ్వతోముఖీ |","ప్రత్యగ్రూపా పరాకాశా ప్రాణదా ప్రాణరూపిణీ ||"],mt:"వీరులచే ఆరాధించబడేది; విరాట్ రూపిణి; రజోమలం లేనిది; అన్ని వైపులా ముఖాలు గలది; అంతర్ముఖ ఆత్మ స్వరూపం; పరాకాశ (చిదాకాశ) రూపిణి; ప్రాణాన్ని ఇచ్చేది; ప్రాణ స్వరూపిణి.",m:"Worshipped by heroes; the cosmic form; free of impurity; faced in every direction; of the inward Self; the supreme space of consciousness; the giver of life; life itself."},
+"150":{t:["మార్తాణ్డభైరవారాధ్యా మన్త్రిణీన్యస్తరాజ్యధూః |","త్రిపురేశీ జయత్సేనా నిస్త్రైగుణ్యా పరాపరా ||"],mt:"మార్తాండ భైరవునిచే ఆరాధించబడేది; మంత్రిణికి (శ్యామలకు) రాజ్యభారాన్ని అప్పగించినది; త్రిపురేశి; జయించే సేనలు గలది; త్రిగుణాలకు అతీతమైనది; పర, అపర స్వరూపిణి.",m:"Worshipped by Martanda Bhairava; who entrusted the burden of the realm to Mantrini; Tripureshi; having victorious armies; beyond the three gunas; both the supreme and the lesser."},
+"151":{t:["సత్యజ్ఞానానన్దరూపా సామరస్యపరాయణా |","కపర్దినీ కలామాలా కామధుక్ కామరూపిణీ ||"],mt:"సత్య, జ్ఞాన, ఆనంద స్వరూపిణి; శివశక్తుల సామరస్యంలో నిమగ్నమైనది; కపర్దిని (జటలు గలది); కళల మాల; కామధేనువు; కోరిన రూపం ధరించేది.",m:"Of the form of truth, knowledge and bliss; devoted to the harmony of Shiva and Shakti; Kapardini, the matted-haired; the garland of the arts; the wish-fulfilling cow; assuming any form at will."},
+"152":{t:["కలానిధిః కావ్యకలా రసజ్ఞా రసశేవధిః |","పుష్టా పురాతనా పూజ్యా పుష్కరా పుష్కరేక్షణా ||"],mt:"కళలకు నిధి; కావ్య కళా స్వరూపిణి; రసజ్ఞురాలు; రసాలకు నిధి; పుష్టి గలది; పురాతనమైనది; పూజ్యురాలు; పుష్కర (ఆకాశం/తామర) రూపం; తామరపూల వంటి కన్నులు గలది.",m:"A treasure of the arts; the art of poetry; the knower of rasa; the treasure of sentiments; nourished; ancient; worshipful; Pushkara (the sky or lotus); lotus-eyed."},
+"153":{t:["పరంజ్యోతిః పరంధామ పరమాణుః పరాత్పరా |","పాశహస్తా పాశహన్త్రీ పరమన్త్రవిభేదినీ ||"],mt:"పరంజ్యోతి; పరంధామం; పరమాణువు; పరాత్పర; పాశాన్ని చేత ధరించేది; పాశాలను (బంధాలను) హరించేది; శత్రు మంత్రాలను ఛేదించేది.",m:"The supreme light; the supreme abode; the supreme atom; higher than the highest; holding the noose; the destroyer of bonds; the breaker of hostile mantras."},
+"154":{t:["మూర్తామూర్తా నిత్యతృప్తా మునిమానసహంసికా |","సత్యవ్రతా సత్యరూపా సర్వాన్తర్యామినీ సతీ ||"],mt:"మూర్త, అమూర్త రూపాలు రెండూ గలది; ఎల్లప్పుడూ తృప్తిగా ఉండేది; మునుల మానస సరోవరంలో హంస; సత్యవ్రతం గలది; సత్య స్వరూపిణి; అందరి అంతర్యామి; సతి.",m:"Both with and without form; ever content; the swan in the Manasa lake of sages' minds; true to her vow; truth itself; the inner controller of all; the good (Sati)."},
+"155":{t:["బ్రహ్మాణీ బ్రహ్మజననీ బహురూపా బుధార్చితా |","ప్రసవిత్రీ ప్రచణ్డాఽఽజ్ఞా ప్రతిష్ఠా ప్రకటాకృతిః ||"],mt:"బ్రహ్మాణి; బ్రహ్మకు తల్లి; అనేక రూపాలు గలది; జ్ఞానులచే పూజించబడేది; సృష్టికి తల్లి; ప్రచండమైన ఆజ్ఞ గలది; ప్రతిష్ఠ (ఆధారం) స్వరూపిణి; ప్రత్యక్షంగా కనిపించే రూపం గలది.",m:"Brahmani; mother of Brahma; of many forms; worshipped by the wise; the bringer forth; of fierce command; the foundation; of manifest form."},
+"156":{t:["ప్రాణేశ్వరీ ప్రాణదాత్రీ పఞ్చాశత్పీఠరూపిణీ |","విశృఙ్ఖలా వివిక్తస్థా వీరమాతా వియత్ప్రసూః ||"],mt:"ప్రాణాలకు ఈశ్వరి; ప్రాణాన్ని ఇచ్చేది; యాభై పీఠాల (అక్షర పీఠాల) స్వరూపిణి; బంధనాలు లేనిది; ఏకాంతంలో ఉండేది; వీరులకు తల్లి; ఆకాశాన్ని ప్రసవించినది.",m:"Queen of the vital breath; the giver of life; of the form of the fifty seats (the letters); free of chains; abiding in solitude; mother of heroes; the mother of space."},
+"157":{t:["ముకున్దా ముక్తినిలయా మూలవిగ్రహరూపిణీ |","భావజ్ఞా భవరోగఘ్నీ భవచక్రప్రవర్తినీ ||"],mt:"ముకుంద (ముక్తిని ఇచ్చేది); ముక్తికి నిలయం; మూల (ఆది) విగ్రహ రూపిణి; భావాలను (భక్తి భావనలను) తెలుసుకునేది; సంసార రోగాన్ని నశింపజేసేది; భవచక్రాన్ని (జనన మరణ చక్రాన్ని) తిప్పేది.",m:"Mukunda, the giver of liberation; the abode of liberation; of the form of the original embodiment; the knower of the heart's feelings; the cure for the disease of worldly existence; the one who sets the wheel of existence turning."},
+"158":{t:["చణ్డసారా శాస్త్రసారా మన్త్రసారా తలోదరీ |","ఉదారకీర్తిరుద్దామవైభవా వర్ణరూపిణీ ||"],mt:"ఛందస్సుల (వేదాల) సారం; శాస్త్రాల సారం; మంత్రాల సారం; సన్నని ఉదరం గలది; ఉదారమైన కీర్తి గలది; అపరిమిత వైభవం గలది; వర్ణాల (అక్షరాల) రూపిణి.",m:"The essence of the Vedic metres; the essence of the scriptures; the essence of mantras; slender-waisted; of generous fame; of boundless splendour; the form of the letters."},
+"159":{t:["జన్మమృత్యుజరాతప్తజనవిశ్రాన్తిదాయినీ |","సర్వోపనిషదుద్ఘుష్టా శాన్త్యతీతకలాత్మికా ||"],mt:"జన్మ, మృత్యువు, ముసలితనంతో తపించే జనులకు విశ్రాంతి ఇచ్చేది; అన్ని ఉపనిషత్తులచే ఘోషించబడేది; శాంతి కళకు కూడా అతీతమైన కళా స్వరూపిణి.",m:"The giver of rest to people scorched by birth, death and old age; proclaimed by all the Upanishads; the soul of the digit beyond even the state of peace."},
+"160":{t:["గమ్భీరా గగనాన్తఃస్థా గర్వితా గానలోలుపా |","కల్పనారహితా కాష్ఠాఽకాన్తా కాన్తార్ధవిగ్రహా ||"],mt:"గంభీరురాలు; ఆకాశం అంతరంగంలో ఉన్నది; గర్వితురాలు (ఆత్మగౌరవం గలది); సంగీతం పట్ల ఆసక్తి గలది; కల్పనలు లేనిది; కాష్ఠ (పరమ లక్ష్యం); అకాంతా (పాపాన్ని తొలగించేది); ప్రియుని (శివుని) అర్ధ శరీరం గలది.",m:"Profound; abiding within the sky; proud; fond of music; free of imagination; Kashtha, the ultimate goal; Akanta, the remover of sin; whose body is half that of her Beloved."},
+"161":{t:["కార్యకారణనిర్ముక్తా కామకేలితరఙ్గితా |","కనత్కనకతాటఙ్కా లీలావిగ్రహధారిణీ ||"],mt:"కార్యకారణ భేదం లేనిది; కామకేళి లీలలో పొంగేది; మెరిసే బంగారు తాటంకాలు గలది; లీలగా రూపాలను ధరించేది.",m:"Free of cause and effect; rippling with the play of love; wearing gleaming golden earrings; assuming forms as sport."},
+"162":{t:["అజా క్షయవినిర్ముక్తా ముగ్ధా క్షిప్రప్రసాదినీ |","అన్తర్ముఖసమారాధ్యా బహిర్ముఖసుదుర్లభా ||"],mt:"పుట్టుక లేనిది; క్షయం లేనిది; సౌందర్యవతి, నిష్కపటురాలు; వెంటనే ప్రసన్నమయ్యేది; అంతర్ముఖులైనవారికి ఆరాధ్యురాలు; బహిర్ముఖులకు పొందడం చాలా కష్టమైనది.",m:"Unborn; free of decay; charming and guileless; quickly gracious; worshipped by those who turn inward; very hard to reach for those who turn outward."},
+"163":{t:["త్రయీ త్రివర్గనిలయా త్రిస్థా త్రిపురమాలినీ |","నిరామయా నిరాలమ్బా స్వాత్మారామా సుధాసృతిః ||"],mt:"వేదత్రయ స్వరూపిణి; ధర్మార్థకామాలనే త్రివర్గానికి నిలయం; మూడు స్థానాలలో ఉన్నది; త్రిపురమాలిని; రోగం లేనిది; ఆధారం అవసరం లేనిది; తన ఆత్మలోనే రమించేది; అమృతం స్రవించేది.",m:"The three Vedas; the abode of the three aims of life; abiding in three realms; Tripuramalini; free of illness; needing no support; delighting in her own Self; the flow of nectar."},
+"164":{t:["సంసారపఙ్కనిర్మగ్నసముద్ధరణపణ్డితా |","యజ్ఞప్రియా యజ్ఞకర్త్రీ యజమానస్వరూపిణీ ||"],mt:"సంసారమనే బురదలో మునిగినవారిని ఉద్ధరించడంలో నేర్పరి; యజ్ఞం ఇష్టమైనది; యజ్ఞాన్ని చేసేది; యజమాని (యజ్ఞం చేసేవాడు) స్వరూపిణి.",m:"Skilled at lifting up those sunk in the mire of worldly life; fond of sacrifice; the performer of sacrifice; the very form of the sacrificer."},
+"165":{t:["ధర్మాధారా ధనాధ్యక్షా ధనధాన్యవివర్ధినీ |","విప్రప్రియా విప్రరూపా విశ్వభ్రమణకారిణీ ||"],mt:"ధర్మానికి ఆధారం; ధనానికి అధ్యక్షురాలు; ధన ధాన్యాలను వృద్ధి చేసేది; విజ్ఞులైన విప్రులకు ప్రియమైనది; విప్ర రూపం గలది; విశ్వాన్ని తిప్పేది.",m:"The support of dharma; the superintendent of wealth; the increaser of wealth and grain; fond of the learned; of the form of a Brahmin; who sets the universe revolving."},
+"166":{t:["విశ్వగ్రాసా విద్రుమాభా వైష్ణవీ విష్ణురూపిణీ |","అయోనిర్యోనినిలయా కూటస్థా కులరూపిణీ ||"],mt:"విశ్వాన్ని మింగేసేది; పగడం వంటి కాంతి గలది; వైష్ణవి; విష్ణు రూపిణి; పుట్టుక లేనిది; సృష్టి మూలమైన యోనిలో నివసించేది; మార్పులేని కూటస్థ స్వరూపం; కుల రూపిణి.",m:"The devourer of the universe; coral-hued; Vaishnavi; of the form of Vishnu; unborn; dwelling in the source of creation; the changeless Kutastha; the form of the Kula."},
+"167":{t:["వీరగోష్ఠీప్రియా వీరా నైష్కర్మ్యా నాదరూపిణీ |","విజ్ఞానకలనా కల్యా విదగ్ధా బైన్దవాసనా ||"],mt:"వీరుల సభలంటే ఇష్టమైనది; వీర స్వరూపిణి; కర్మబంధం లేనిది; నాద స్వరూపిణి; విజ్ఞానాన్ని ప్రసాదించేది; సమర్థురాలు; నేర్పరి; బిందువే ఆసనంగా గలది.",m:"Fond of assemblies of heroes; the heroic; free of the bonds of action; of the form of sound; the one who bestows realised knowledge; capable; accomplished; seated on the bindu."},
+"168":{t:["తత్త్వాధికా తత్త్వమయీ తత్త్వమర్థస్వరూపిణీ |","సామగానప్రియా సౌమ్యా సదాశివకుటుమ్బినీ ||"],mt:"తత్త్వాలకు అతీతమైనది; తత్త్వమయి; 'తత్', 'త్వం' పదాల అర్థ స్వరూపిణి; సామగానం ఇష్టమైనది; సౌమ్యమైనది; సదాశివుని ధర్మపత్ని.",m:"Beyond the principles; made of the principles; the form of the meaning of 'That' and 'Thou'; fond of Sama chanting; gentle; the householder-consort of Sadashiva."},
+"169":{t:["సవ్యాపసవ్యమార్గస్థా సర్వాపద్వినివారిణీ |","స్వస్థా స్వభావమధురా ధీరా ధీరసమర్చితా ||"],mt:"సవ్య (దక్షిణ), అపసవ్య (వామ) మార్గాలు రెండింటిలో ఉన్నది; సర్వ ఆపదలను నివారించేది; తనలో తాను స్థిరంగా ఉండేది; సహజంగానే మధురమైనది; ధీర; ధీరులచే పూజించబడేది.",m:"Abiding in both the right-hand and left-hand paths; the remover of all calamities; established in herself; sweet by nature; steadfast; worshipped by the steadfast."},
+"170":{t:["చైతన్యార్ఘ్యా సమారాధ్యా చైతన్యకుసుమప్రియా |","సదోదితా సదాతుష్టా తరుణాదిత్యపాటలా ||"],mt:"చైతన్యమనే అర్ఘ్యంతో పూజించదగినది; చక్కగా ఆరాధించదగినది; చైతన్య కుసుమాలంటే ప్రియమైనది; ఎల్లప్పుడూ ఉదయించి ఉండేది; ఎల్లప్పుడూ సంతుష్టిగా ఉండేది; ఉదయ సూర్యుని వంటి లేత ఎరుపు రంగు గలది.",m:"Worshipped with the arghya of consciousness; fully to be worshipped; fond of the flower of consciousness; ever risen; ever content; rosy like the young morning sun."},
+"171":{t:["దక్షిణా దక్షిణారాధ్యా దరస్మేరముఖామ్బుజా |","కౌలినీ కేవలాఽనర్ఘ్యా కైవల్యపదదాయినీ ||"],mt:"దక్షురాలు; దక్షిణామార్గ పూజలతో ఆరాధించబడేది; కొద్ది నవ్వుతో ప్రకాశించే ముఖపద్మం గలది; కౌలినీ; కేవలం (అద్వితీయం); వెలకట్టలేనిది; కైవల్య పదాన్ని ఇచ్చేది.",m:"The skilful; worshipped through the right-hand (Dakshina) mode; her lotus face lit with a slight smile; Kaulini; the absolute; priceless; the giver of the state of kaivalya."},
+"172":{t:["స్తోత్రప్రియా స్తుతిమతీ శ్రుతిసంస్తుతవైభవా |","మనస్వినీ మానవతీ మహేశీ మఙ్గలాకృతిః ||"],mt:"స్తోత్రాలంటే ప్రియమైనది; స్తుతికి తగినది; వేదాలు కీర్తించే వైభవం గలది; ఆలోచనాశీలి; గౌరవనీయురాలు; మహేశి; మంగళ స్వరూపం గలది.",m:"Fond of hymns; worthy of praise; whose glory is sung by the Vedas; the thoughtful; the honoured; Maheshi; of auspicious form."},
+"173":{t:["విశ్వమాతా జగద్ధాత్రీ విశాలాక్షీ విరాగిణీ |","ప్రగల్భా పరమోదారా పరామోదా మనోమయీ ||"],mt:"విశ్వానికి తల్లి; జగత్తును ధరించేది; విశాలమైన కన్నులు గలది; విరాగిణి; ప్రౌఢ; అత్యంత ఉదారురాలు; పరమానందం గలది; మనోమయి.",m:"Mother of the universe; the supporter of the world; wide-eyed; detached; the confident; supremely generous; of supreme joy; made of mind."},
+"174":{t:["వ్యోమకేశీ విమానస్థా వజ్రిణీ వామకేశ్వరీ |","పఞ్చయజ్ఞప్రియా పఞ్చప్రేతమఞ్చాధిశాయినీ ||"],mt:"ఆకాశమే కేశాలుగా గలది; విమానంలో ఉన్నది; వజ్రాయుధం ధరించినది; వామకేశ్వరి; పంచయజ్ఞాలంటే ప్రియమైనది; పంచప్రేతాలతో కూడిన మంచంపై శయనించినది.",m:"With the sky as her hair; abiding in a celestial car; the wielder of the thunderbolt; Vamakeshvari; fond of the five sacrifices; reclining on the couch of the five Pretas."},
+"175":{t:["పఞ్చమీ పఞ్చభూతేశీ పఞ్చసఙ్ఖ్యోపచారిణీ |","శాశ్వతీ శాశ్వతైశ్వర్యా శర్మదా శమ్భుమోహినీ ||"],mt:"పంచమి; పంచభూతాలకు ఈశ్వరి; ఐదు సంఖ్యతో కూడిన ఉపచారాలతో పూజించబడేది; శాశ్వతమైనది; శాశ్వత ఐశ్వర్యం గలది; సుఖాన్ని ఇచ్చేది; శంభుని మోహింపజేసేది.",m:"The fifth; Queen of the five elements; worshipped with the five-fold offerings; eternal; of eternal sovereignty; the giver of happiness; the enchantress of Shambhu."},
+"176":{t:["ధరాధరసుతా ధన్యా ధర్మిణీ ధర్మవర్ధినీ |","లోకాతీతా గుణాతీతా సర్వాతీతా శమాత్మికా ||"],mt:"పర్వత రాజు కుమార్తె; ధన్య; ధర్మిణి; ధర్మాన్ని వృద్ధి చేసేది; లోకాతీతురాలు; గుణాతీతురాలు; సర్వాతీతురాలు; శమ (శాంతి) స్వరూపిణి.",m:"Daughter of the mountain king; blessed; the upholder of dharma; the increaser of dharma; beyond the worlds; beyond the gunas; beyond everything; the very nature of peace."},
+"177":{t:["బన్ధూకకుసుమప్రఖ్యా బాలా లీలావినోదినీ |","సుమఙ్గలీ సుఖకరీ సువేషాఢ్యా సువాసినీ ||"],mt:"బంధూక (మంకెన) పుష్పం వంటి కాంతి గలది; బాల; లీలా వినోదిని; సుమంగళి; సుఖాన్ని కలిగించేది; చక్కని వేషభూషలు గలది; సువాసిని.",m:"Glowing like the bandhuka flower; the young girl; delighting in play; ever-auspicious; the giver of happiness; richly dressed; the Suvasini."},
+"178":{t:["సువాసిన్యర్చనప్రీతాఽఽశోభనా శుద్ధమానసా |","బిన్దుతర్పణసన్తుష్టా పూర్వజా త్రిపురామ్బికా ||"],mt:"సువాసినుల (ముత్తైదువుల) పూజకు ప్రీతి చెందేది; అన్ని విధాలా శోభించేది; శుద్ధ మనస్సు గలది; బిందు తర్పణంతో తృప్తి చెందేది; పూర్వజ (అందరికంటే ముందే ఉన్నది); త్రిపురాంబిక.",m:"Pleased by the worship of Suvasinis; radiant on all sides; pure-minded; satisfied by the bindu oblation; the first-born, ancient one; Tripurambika."},
+"179":{t:["దశముద్రాసమారాధ్యా త్రిపురాశ్రీవశఙ్కరీ |","జ్ఞానముద్రా జ్ఞానగమ్యా జ్ఞానజ్ఞేయస్వరూపిణీ ||"],mt:"దశముద్రలతో ఆరాధించబడేది; త్రిపురాశ్రీ (వశ్యకారి శక్తి) రూపంతో వశం చేసుకునేది; జ్ఞానముద్ర స్వరూపిణి; జ్ఞానంతో తెలుసుకోదగినది; జ్ఞానం, జ్ఞేయం రెండూ తానే.",m:"Worshipped with the ten mudras; the Tripurashri who brings all under her sway; the Jnana-mudra; attained through knowledge; the form of both knowledge and the known."},
+"180":{t:["యోనిముద్రా త్రిఖణ్డేశీ త్రిగుణామ్బా త్రికోణగా |","అనఘాఽద్భుతచారిత్రా వాఞ్ఛితార్థప్రదాయినీ ||"],mt:"యోనిముద్ర; త్రిఖండేశి; త్రిగుణాంబ; త్రికోణంలో ఉన్నది; నిర్దోషి; అద్భుత చరిత్ర గలది; కోరిన ఫలాలను ఇచ్చేది.",m:"The Yoni-mudra; Queen of the three sections; Mother of the three gunas; abiding in the triangle; sinless; of wondrous deeds; the granter of desired aims."},
+"181":{t:["అభ్యాసాతిశయజ్ఞాతా షడధ్వాతీతరూపిణీ |","అవ్యాజకరుణామూర్తిరజ్ఞానధ్వాన్తదీపికా ||"],mt:"సాధన అతిశయం ద్వారా తెలియబడేది; షడధ్వాలకు (ఆరు మార్గాలకు) అతీతమైన రూపం గలది; కారణం లేని కరుణామూర్తి; అజ్ఞానాంధకారానికి దీపం.",m:"Known through intense practice; beyond the six paths; the embodiment of causeless compassion; the lamp against the darkness of ignorance."},
+"182":{t:["ఆబాలగోపవిదితా సర్వానుల్లఙ్ఘ్యశాసనా |","శ్రీచక్రరాజనిలయా శ్రీమత్త్రిపురసున్దరీ ||"],mt:"బాల గోపాలుల వరకు అందరికీ తెలిసినది; ఆమె శాసనాన్ని ఎవరూ అతిక్రమించలేరు; శ్రీచక్రరాజమే నివాసంగా గలది; శ్రీమత్ త్రిపురసుందరి.",m:"Known to all, down to children and cowherds; whose command none can transgress; whose abode is the king of chakras, the Sri Chakra; the glorious Tripurasundari."},
+"183":{t:["శ్రీశివా శివశక్త్యైక్యరూపిణీ లలితామ్బికా |","ఏవం శ్రీలలితాదేవ్యా నామ్నాం సహస్రకం జగుః ||"],mt:"శ్రీ శివా (శివుని శక్తి); శివశక్తుల ఐక్య స్వరూపిణి; లలితాంబిక. ఈ విధంగా శ్రీ లలితాదేవి వేయి నామాలను గానం చేశారు.",m:"Sri Shiva, the Shakti of Shiva; the form of the oneness of Shiva and Shakti; Lalitambika. Thus were the thousand names of Sri Lalita Devi sung."},
+
+};
+try{var q=+localStorage.getItem("lalita-pp");if([5,8,10,15].indexOf(q)>-1)PP=q;SHOWM=localStorage.getItem("lalita-showm")=="1";BM=JSON.parse(localStorage.getItem("lalita-bm")||"[]")}catch(e){}
+var N=Math.max(TOTAL,Math.max.apply(null,Object.keys(D).map(Number)));
+function pages(){return Math.max(1,Math.ceil((LST?LST.length:N)/PP))}
+var c=1,v=1,$=function(i){return document.getElementById(i)};
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+var AC=null,NB=null,DV=null,MG=null,SND=true,VOL=.3; // VOL = master volume (0 to 1)
+try{SND=localStorage.getItem("widu-snd")!="0"}catch(e){}
+function ac(){if(!SND)return null;if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}
+ var L=AC.sampleRate*2,b=AC.createBuffer(1,L,AC.sampleRate),d=b.getChannelData(0),l=0;
+ for(var i=0;i<L;i++){d[i]=Math.random()*2-1}NB=b;MG=AC.createGain();MG.gain.value=VOL;var cp=AC.createDynamicsCompressor();cp.threshold.value=-24;cp.ratio.value=6;MG.connect(cp);cp.connect(AC.destination)}
+ if(AC.state=="suspended")AC.resume();return AC}
+function voice(f,q){var s=AC.createBufferSource(),fl=AC.createBiquadFilter(),g=AC.createGain();s.buffer=NB;s.loop=true;fl.type="bandpass";fl.frequency.value=f;fl.Q.value=q;g.gain.value=0;s.connect(fl);fl.connect(g);g.connect(MG);s.start(0,Math.random()*1.5);return{s:s,f:fl,g:g}}
+function grain(t,a,f){var s=AC.createBufferSource(),fl=AC.createBiquadFilter(),g=AC.createGain(),L=.008+Math.random()*.02;s.buffer=NB;fl.type="bandpass";fl.frequency.value=f;fl.Q.value=1.2;s.connect(fl);fl.connect(g);g.connect(MG);
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(a,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+L);s.start(t,Math.random()*1.5);s.stop(t+L+.02)}
+function rustle(dur,vol){if(!ac())return;var t=AC.currentTime,n=Math.round(10+dur*18),i,k=24,c=new Float32Array(k);
+ for(i=0;i<n;i++){var x=Math.pow(Math.random(),1.6)*.85;grain(t+x*dur,vol*(.25+Math.random()*.75)*(1-x*.5),2500+Math.random()*4500)}
+ var v=voice(900,.5);for(i=0;i<k;i++){var y=i/(k-1);c[i]=vol*.45*Math.pow(Math.sin(Math.PI*Math.pow(y,.7)),2)}
+ v.g.gain.setValueCurveAtTime(c,t,dur);v.f.frequency.setValueCurveAtTime(new Float32Array([600,1300,1900,1200,700]),t,dur);v.s.stop(t+dur+.05)}
+function slap(vol){if(!ac())return;var t=AC.currentTime,v=voice(320,.7);v.g.gain.setValueAtTime(vol*.9,t);v.g.gain.exponentialRampToValueAtTime(.0001,t+.09);v.s.stop(t+.12);grain(t,vol*.6,2200)}
+function dragSnd(l){if(!ac())return;if(!DV)DV=voice(900,.5);var t=AC.currentTime,g=DV.g.gain;g.cancelScheduledValues(t);g.setTargetAtTime(l*.9,t,.04);g.setTargetAtTime(0,t+.07,.08);DV.f.frequency.setTargetAtTime(600+l*5000,t,.04);if(Math.random()<l*5)grain(t,l*3,2500+Math.random()*4500)}
+function dragSndEnd(){if(!DV||!AC)return;var v=DV,t=AC.currentTime;DV=null;v.g.gain.cancelScheduledValues(t);v.g.gain.setTargetAtTime(0,t,.04);v.s.stop(t+.3)}
+
+var TA=null,RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function endTurn(){if(!TA)return;var a=TA;TA=null;cancelAnimationFrame(a.raf);a.leaf.remove();a.cast.remove();$("slide").innerHTML=a.fin;if(a.go)go(a.go[0],a.go[1])}
+function mkLeaf(front,W,H){
+ var st=$("stage"),n=14,sw=W/n,leaf=document.createElement("div"),cast=document.createElement("div"),S=[],SH=[],par=leaf,R=Math.PI/180;
+ leaf.className="leaf";leaf.style.width=W+"px";leaf.style.height=H+"px";
+ leaf.setAttribute("inert","");leaf.setAttribute("aria-hidden","true");cast.className="cast";
+ for(var i=0;i<n;i++){
+  var s=document.createElement("div"),pos='left:'+(-i*sw)+'px;width:'+W+'px;height:'+H+'px';
+  s.className="strip";s.style.cssText="left:"+(i?sw:0)+"px;width:"+(sw+.7)+"px;height:"+H+"px";
+  s.innerHTML='<div class="face fr'+(i?'':' spine')+'"><div class="card pg" style="'+pos+'">'+front+'</div><i class="sh"></i></div><div class="face bk"><div class="card pg ghost" style="'+pos+'">'+front+'</div><i class="sh"></i></div>';
+  par.appendChild(s);par=s;S.push(s);SH.push(s.querySelectorAll(".sh"))
+ }
+ st.appendChild(cast);st.appendChild(leaf);TA={raf:0,leaf:leaf,cast:cast,fin:""};
+ return function(p){
+  var m=p*180,bend=1.3*Math.sin(2*Math.PI*p),cum=0;
+  for(var i=0;i<n;i++){
+   var ang=m/n+(i?bend:0);cum+=ang;S[i].style.transform="rotateY("+(-ang)+"deg)";
+   var sh=.42*Math.pow(Math.abs(Math.sin(cum*R)),1.1);SH[i][0].style.opacity=sh;SH[i][1].style.opacity=sh
+  }
+  var px=W*Math.max(0,Math.cos(cum*R)),a=.3*Math.sin(Math.PI*p);
+  cast.style.background="linear-gradient(90deg,rgba(0,0,0,"+a+") "+px+"px,rgba(0,0,0,0) "+(px+W*.4)+"px)";
+  leaf.style.opacity=p>.7?Math.max(0,1-(p-.7)/.3):1
+ }
+}
+function runTo(set,from,to,dur,done){var T=performance.now();
+ function f(now){var t=Math.min(1,(now-T)/dur),e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;set(from+(to-from)*e);if(t<1)TA.raf=requestAnimationFrame(f);else done()}
+ TA.raf=requestAnimationFrame(f)}
+function setup(oldH,newH,dir){ // returns {set,W}
+ var sl=$("slide"),next=dir=="next",W=sl.offsetWidth,H,front;
+ if(next){H=sl.offsetHeight;front=oldH;sl.innerHTML=newH}
+ else{sl.innerHTML=newH;H=sl.offsetHeight;front=newH;sl.innerHTML=oldH}
+ return{set:mkLeaf(front,W,H),W:W}}
+function turnPage(h,dir){
+ var sl=$("slide");endTurn();var oldH=sl.innerHTML;
+ if(!dir||RM||!oldH){sl.innerHTML=h;return}
+ var next=dir=="next",set=setup(oldH,h,dir).set;TA.fin=h;set(next?0:1);rustle(1,.5);
+ runTo(set,next?0:1,next?1:0,1000,function(){slap(.6);endTurn()})
+}
+function nbr(d){return d=="next"?(c<pages()?[c+1,1]:null):(c>1?[c-1,1]:null)}
+function stz(k){var d=D[k],bm=BM.indexOf(k)>-1,h='<section class="st" data-s="'+k+'"><div class="sn"><button class="no" aria-expanded="false" title="Tap to show or hide this meaning">'+k+'</button><button class="star" data-star="'+k+'" aria-label="Bookmark stanza '+k+'" aria-pressed="'+bm+'">'+(bm?"★":"☆")+'</button></div>';
+ if(!d)return h+'<p class="note">Stanza '+k+' hasn’t been added to the data yet.</p></section>';
+ h+='<p class="sl">'+d.t.map(esc).join("<br>")+'</p><div class="mean">'+(d.mt?'<p class="mt">'+esc(d.mt)+'</p>':'')+(d.m?'<p>'+esc(d.m)+'</p>':'');
+ if(d.w)h+='<div class="words">'+d.w.split(";").map(function(x){var i=x.indexOf("=");return i<0?"":'<div class="w"><b>'+esc(x.slice(0,i).trim())+'</b><span>'+esc(x.slice(i+1).trim())+'</span></div>'}).join("")+'</div>';
+ return h+'</div></section>'}
+function cnt(){return LST?LST.length:N}
+function at(i){return LST?LST[i]:i+1}
+function pg(k){return Math.floor((LST?Math.max(0,LST.indexOf(k)):k-1)/PP)+1}
+function gl(i){var L=[];GR[i][2].forEach(function(r){for(var k=r[0];k<=r[1]&&k<=N;k++)if(L.indexOf(k)<0)L.push(k)});return L.sort(function(a,b){return a-b})}
+function setFilter(i){FIL=i;LST=i<0?null:gl(i);c=1;FOCUS=0;render()}
+function pageHTML(p){var a=(p-1)*PP,b=Math.min(cnt(),p*PP),h='<div class="pm"><span class="meta">'+(LST?esc(GR[FIL][0]):'Stanzas '+at(a)+'–'+at(b-1)+' of '+N)+'</span><button class="sec sm" data-act="tm">'+(SHOWM?"Compact view":"Show meanings")+'</button></div>';
+ if(LST)h+='<div class="fb"><span>'+LST.length+' stanzas · '+esc(GR[FIL][1])+'</span><button class="sec sm" data-act="cf">✕ Clear filter</button></div>';
+ h+='<div class="'+(SHOWM?"":"compact")+'">';
+ for(var i=a;i<b;i++){var k=at(i);if(!LST)SEC.forEach(function(x){if(x[1]==k)h+='<h3 class="sect">'+esc(x[0])+'</h3>'});h+=stz(k)}
+ return h+"</div>"}
+function render(dir){var P=pages(),a=(c-1)*PP,b=Math.min(cnt(),c*PP);turnPage(pageHTML(c),dir);
+ S=FOCUS||at(a);
+ $("pos").textContent="Page "+c+" / "+P+" · "+at(a)+"–"+at(b-1);
+ $("prev").disabled=c<=1;$("next").disabled=c>=P;
+ if(!LST)try{localStorage.setItem("lalita-pos",S)}catch(e){}
+ scrollTo(0,0);
+ if(FOCUS){var el=document.querySelector('#slide [data-s="'+FOCUS+'"]');if(el){el.classList.add("flash");el.scrollIntoView({block:"start"})}FOCUS=0}}
+function go(nc,nv,dir){c=nc;v=nv;render(dir)}
+function goS(k){if(LST&&LST.indexOf(k)<0){LST=null;FIL=-1}FOCUS=k;go(pg(k),1)}
+function next(){c<pages()&&go(c+1,1,"next")}
+function prev(){c>1&&go(c-1,1,"prev")}
+function jump(){var m=/^\s*(\d{1,3})\s*$/.exec($("jump").value),k=m&&+m[1],ok=k>=1&&k<=N;$("jump").className=ok?"":"bad";if(ok){goS(k);$("jump").blur()}}
+$("next").onclick=next;$("prev").onclick=prev;
+$("slide").addEventListener("click",function(e){var b=e.target.closest(".no");if(b){var o=b.closest(".st").classList.toggle("open");b.setAttribute("aria-expanded",o);return}b=e.target.closest("[data-star]");
+ if(b){var k=+b.dataset.star,i=BM.indexOf(k);if(i>-1)BM.splice(i,1);else BM.push(k);try{localStorage.setItem("lalita-bm",JSON.stringify(BM))}catch(x){}b.textContent=i>-1?"☆":"★";b.setAttribute("aria-pressed",i<0);return}
+ b=e.target.closest("[data-act=cf]");if(b){setFilter(-1);return}b=e.target.closest("[data-act=tm]");if(b){SHOWM=!SHOWM;try{localStorage.setItem("lalita-showm",SHOWM?"1":"0")}catch(x){}var y=scrollY;render();scrollTo(0,y)}});
+function nz(s){return String(s||"").normalize("NFC").toLowerCase().replace(/[\u200b-\u200d|॥।]/g," ").replace(/\s+/g," ")}
+function line(d){return d.t[0].replace(/[|॥]+/g,"").trim()}
+function search(){var q=nz($("q").value).trim(),box=$("res"),out=[];
+ if(!q){box.innerHTML='<p class="note">Type Telugu or English words. Searches the stanzas loaded in this file.</p>';return out}
+ var ts=q.split(" ");
+ Object.keys(D).forEach(function(k){var d=D[k],h=nz([].concat(d.t,d.mt||"",d.m||"",d.w||"").join(" "));if(ts.every(function(t){return h.indexOf(t)>-1}))out.push(+k)});
+ out.sort(function(a,b){return a-b});
+ box.innerHTML=out.length?out.slice(0,40).map(function(k){var d=D[k];return '<button data-k="'+k+'"><b>'+k+'</b> '+esc(line(d))+'<small>'+esc((d.m||"").slice(0,90))+'</small></button>'}).join(""):'<p class="note">No match in the stanzas loaded so far.</p>';
+ return out}
+function openK(k){$("sp").classList.remove("open");goS(+k)}
+$("sbtn").onclick=function(){var o=$("sp").classList.toggle("open");if(o){search();$("q").focus()}};
+$("q").oninput=search;
+$("q").onkeydown=function(e){if(e.key=="Enter"){var r=search();if(r[0])openK(r[0])}if(e.key=="Escape")$("sp").classList.remove("open")};
+$("res").onclick=function(e){var b=e.target.closest("button");if(b)openK(b.dataset.k)};
+var mn=document.querySelector("main"),G=null;
+mn.addEventListener("touchstart",function(e){if(e.touches.length>1||e.target.closest(".ctl"))return;endTurn();var t=e.touches[0];G={x:t.clientX,y:t.clientY,t:performance.now()}},{passive:true});
+mn.addEventListener("touchmove",function(e){if(!G)return;var t=e.touches[0],dx=t.clientX-G.x,dy=t.clientY-G.y,now=performance.now();
+ if(!G.set){
+  if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.3){if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx))G=null;return}
+  if(RM)return;
+  var dir=dx<0?"next":"prev",nb=nbr(dir);if(!nb){G=null;return}
+  var fin=pageHTML(nb[0],nb[1]),old=$("slide").innerHTML,L=setup(old,fin,dir);
+  TA.fin=old;G.set=L.set;G.dir=dir;G.nb=nb;G.fin=fin;G.old=old;G.W=L.W;G.sx=t.clientX;G.lp=dir=="next"?0:1;G.lq=0;G.v=0;G.lt=now;G.q=0;G.set(G.lp);ac()
+ }
+ var span=Math.min(G.W*.85,420),d=t.clientX-G.sx,q=Math.max(0,Math.min(1,(G.dir=="next"?-d:d)/span)),p=G.dir=="next"?q:1-q,dt=Math.max(1,now-G.lt);
+ G.v=.6*G.v+.4*(q-G.lq)/dt;dragSnd(Math.min(.3,Math.abs(p-G.lp)/dt*75));
+ G.q=q;G.lq=q;G.lp=p;G.lt=now;G.set(p)
+},{passive:true});
+mn.addEventListener("touchend",function(e){var g=G;G=null;if(!g)return;
+ if(!g.set){if(RM){var t=e.changedTouches[0],dx=t.clientX-g.x,dy=t.clientY-g.y;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){dx<0?next():prev()}}return}
+ dragSndEnd();
+ var nx=g.dir=="next",commit=g.q>.4||(g.v>.0012&&g.q>.08),p=nx?g.q:1-g.q,tp=commit?(nx?1:0):(nx?0:1),dur=150+700*Math.abs(tp-p);
+ if(commit){TA.fin=g.fin;TA.go=g.nb;rustle(dur/1000,.4)}
+ runTo(g.set,p,tp,dur,function(){slap(commit?.6:.2);endTurn()})
+},{passive:true});
+mn.addEventListener("touchcancel",function(){var g=G;G=null;if(g&&g.set){dragSndEnd();endTurn()}},{passive:true});
+function sndUI(){var b=$("snd");b.textContent=SND?"🔊":"🔇";b.setAttribute("aria-pressed",SND)}
+$("snd").onclick=function(){SND=!SND;try{localStorage.setItem("widu-snd",SND?"1":"0")}catch(e){}sndUI();if(SND)rustle(.5,.4);else dragSndEnd()};sndUI();
+$("go").onclick=jump;
+$("jump").onkeydown=function(e){if(e.key=="Enter")jump()};
+document.onkeydown=function(e){if(e.target.tagName=="INPUT")return;if(e.key=="ArrowRight")next();if(e.key=="ArrowLeft")prev()};
+function setTheme(m){document.documentElement.setAttribute("data-theme",m)}
+var mode;
+try{mode=localStorage.getItem("widu-theme-mode")}catch(e){}
+setTheme(mode||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));
+$("theme").onclick=function(){var n=document.documentElement.getAttribute("data-theme")=="light"?"dark":"light";setTheme(n);try{localStorage.setItem("widu-theme-mode",n)}catch(e){}};
+try{var r=+localStorage.getItem("lalita-pos");if(r>=1&&r<=N)c=Math.floor((r-1)/PP)+1}catch(e){}
+function buildIx(){var P=pages(),h="",p,a,b;
+ $("ixr").max=N;$("ixr").value=S;$("ixsl").textContent="Scrub · Stanza "+S+" / "+N;
+ $("ixth").innerHTML='<h3>Themes · విషయాలు (filter)</h3><div class="chips">'+(LST?'<button data-g="-1">✕ All stanzas</button>':'')+GR.map(function(g,i){return '<button data-g="'+i+'"'+(i==FIL?' class="on"':'')+'>'+esc(g[0])+' · '+gl(i).length+'</button>'}).join("")+'</div>';
+ $("ixsec").innerHTML=SEC.length>1?'<h3>Sections · విభాగాలు</h3><div class="chips">'+SEC.map(function(x){return '<button data-s="'+x[1]+'">'+esc(x[0])+'</button>'}).join("")+'</div>':"";
+ $("ixbm").innerHTML=BM.length?BM.slice().sort(function(a,b){return a-b}).map(function(k){return '<button data-s="'+k+'">★ '+k+'</button>'}).join(""):'<span class="note">Tap ☆ on any stanza to save it here.</span>';
+ for(p=1;p<=P;p++){a=(p-1)*PP;b=Math.min(cnt(),p*PP);h+='<button data-p="'+p+'"'+(p==c?' class="on"':"")+'>'+at(a)+'–'+at(b-1)+'</button>'}
+ $("ixpg").innerHTML=h;
+ $("ixpp").innerHTML=[5,8,10,15].map(function(n){return '<button data-pp="'+n+'"'+(n==PP?' class="on"':"")+'>'+n+'</button>'}).join("")}
+function closeIx(){$("ixm").classList.remove("open")}
+$("ix").onclick=function(){buildIx();$("ixm").classList.add("open")};
+$("ixx").onclick=closeIx;
+$("ixm").addEventListener("click",function(e){if(e.target===this)return closeIx();var b=e.target.closest("button");if(!b)return;
+ if(b.dataset.s){closeIx();goS(+b.dataset.s)}
+ else if(b.dataset.g!==undefined){closeIx();setFilter(+b.dataset.g)}
+ else if(b.dataset.p){closeIx();go(+b.dataset.p,1)}
+ else if(b.dataset.pp){PP=+b.dataset.pp;try{localStorage.setItem("lalita-pp",PP)}catch(x){}c=pg(S);render();buildIx()}});
+$("ixr").oninput=function(){$("ixsl").textContent="Scrub · Stanza "+this.value+" / "+N};
+$("ixr").onchange=function(){closeIx();goS(+this.value)};
+document.addEventListener("keydown",function(e){if(e.key=="Escape")closeIx()});
+var saf=false;
+$("saf").onclick=function(){saf=!saf;document.body.classList.toggle("saf",saf);this.setAttribute("aria-pressed",saf)};
+var FEEDBACK_URL="https://forms.gle/q34LuE2QsMxpFwww8";   // paste your Google Form link here (the one ending in /viewform)
+var FB_FIELD="";       // optional: the form's shloka field id, like entry.123456789 (auto-fills the shloka number)
+$("fb").onclick=function(){if(!FEEDBACK_URL){alert("Feedback link is not set yet.");return}var u=FEEDBACK_URL;if(FB_FIELD)u+=(u.indexOf("?")>0?"&":"?")+"usp=pp_url&"+FB_FIELD+"="+encodeURIComponent(S);window.open(u,"_blank","noopener")};
+render();
+</script>
+</body>
+</html>
