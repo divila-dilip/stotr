@@ -114,6 +114,16 @@ details{margin-top:6px}summary{cursor:pointer;color:var(--pri);font-weight:500;p
 .mean{margin-top:6px}.compact .mean{display:none}.compact .st.open .mean{display:block}.compact .st{margin-bottom:8px;padding-bottom:8px}
 .sect{margin:18px 0 8px;font-size:15px;color:var(--pri)}.sect:first-child{margin-top:0}.compact .sect{display:none}
 .fb{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--neu);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-size:13px}
+
+/* ===== common-topbar v1 (same block in every page) ===== */
+header{min-height:56px;gap:8px;padding:8px 16px;background:var(--paper);border-bottom:1px solid var(--div)}
+header .home-link{order:-2;flex:none;white-space:nowrap}
+header h1{order:-1;flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header #theme{order:99;flex:none}
+.home-link.cur{pointer-events:none;background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+@media(max-width:760px){header .home-link{padding:8px 10px}header .home-link span:last-child{display:none}}
+@media(max-width:600px){header{padding:8px;gap:4px}}
+/* ===== end common-topbar ===== */
 </style>
 </head>
 <body>

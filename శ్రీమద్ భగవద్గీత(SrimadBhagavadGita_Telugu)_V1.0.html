@@ -95,6 +95,16 @@ main{touch-action:pan-y}
 .mbox h3{font-size:15px;margin:14px 0 4px}.mbox p.mt{margin:0 0 4px}
 #ovx{position:sticky;bottom:0;box-shadow:0 0 0 6px var(--paper)}
 #ft{margin:32px 0 8px;text-align:center;color:var(--tx2);font-size:12px}#ft b{color:var(--tx)}#ft button{margin-top:8px}
+
+/* ===== common-topbar v1 (same block in every page) ===== */
+header{min-height:56px;gap:8px;padding:8px 16px;background:var(--paper);border-bottom:1px solid var(--div)}
+header .home-link{order:-2;flex:none;white-space:nowrap}
+header h1{order:-1;flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header #theme{order:99;flex:none}
+.home-link.cur{pointer-events:none;background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+@media(max-width:760px){header .home-link{padding:8px 10px}header .home-link span:last-child{display:none}}
+@media(max-width:600px){header{padding:8px;gap:4px}}
+/* ===== end common-topbar ===== */
 </style>
 </head>
 <body>

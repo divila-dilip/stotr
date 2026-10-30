@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
-  
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>స్తోత్ర నిధి</title>
@@ -17,15 +16,20 @@ body{background:var(--bg);color:var(--tx);font:400 14px/1.5 Inter,sans-serif;pad
 button,input{font:500 14px Inter,"Noto Serif Telugu","Noto Serif Devanagari",sans-serif}
 button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
 #app{height:100%;display:flex;flex-direction:column}
-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 16px;background:var(--paper);border-bottom:1px solid var(--div)}
-header b{font-size:18px;color:var(--pri)}
-.tools{display:flex;gap:8px;align-items:center}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:56px;padding:8px 16px;background:var(--paper);border-bottom:1px solid var(--div)}
+.home-link{order:-2;flex:none;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--pri);border:1px solid var(--pri);color:var(--onpri);text-decoration:none;font-weight:600;line-height:1;white-space:nowrap;pointer-events:none}
+.home-link .icon{font-size:18px;line-height:1}
+header h1{order:-1;flex:1 1 0;min-width:0;margin:0;font-size:18px;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+button{background:var(--pri);color:var(--onpri);border:0;border-radius:20px;padding:8px 16px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+button:hover{background:var(--hov)}
+button.sec{background:var(--neu);color:var(--tx)}
+#theme{order:99;flex:none}
 .seg{display:flex;background:var(--neu);border-radius:20px;padding:2px}
-.seg button{background:none;color:var(--tx);border:0;border-radius:18px;padding:6px 14px;cursor:pointer;font-weight:600}
+.seg button{background:none;color:var(--tx);box-shadow:none;border:0;border-radius:18px;padding:6px 14px;cursor:pointer;font-weight:600}
 .seg button[aria-pressed="true"]{background:var(--pri);color:var(--onpri)}
-#theme{background:var(--neu);color:var(--tx);border:0;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px}
 main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,3vh,28px);padding:12px 16px;width:100%;max-width:960px;margin:0 auto}
 .hero{text-align:center}
+h1.big{font-size:clamp(24px,5vh,38px);margin:6px 0 2px;white-space:normal;overflow:visible;flex:none}
 .om{font-size:clamp(28px,6vh,44px);line-height:1;color:var(--saf)}
 h1{margin:6px 0 2px;font-size:clamp(24px,5vh,38px);font-weight:600;line-height:1.3}
 .sub{margin:0;color:var(--tx2);font-size:clamp(13px,2vh,15px)}
@@ -33,9 +37,11 @@ h1{margin:6px 0 2px;font-size:clamp(24px,5vh,38px);font-weight:600;line-height:1
 .search input{width:100%;height:clamp(48px,7vh,60px);padding:0 20px 0 52px;border:2px solid var(--bd);border-radius:30px;background:var(--paper);color:var(--tx);font-size:clamp(15px,2.2vh,18px);box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .search input:focus{border-color:var(--pri);outline:0}
 .search svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:22px;height:22px;stroke:var(--tx2);fill:none;stroke-width:2;stroke-linecap:round}
-.grid{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid{width:100%;max-width:760px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;min-height:clamp(120px,22vh,170px);padding:12px;background:var(--paper);border:1px solid var(--div);border-radius:12px;color:var(--tx);text-decoration:none;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .card:hover{border-color:var(--pri)}
+.card.all{background:var(--neu);border-style:dashed}
+.card.ph{opacity:.5;pointer-events:none;border-style:dashed;background:transparent;box-shadow:none}
 .badge{width:44px;height:44px;border-radius:50%;background:var(--neu);color:var(--pri);display:grid;place-items:center;font-size:20px;font-weight:600}
 .card h2{margin:0;font-size:clamp(14px,2.2vh,17px);font-weight:600;line-height:1.4}
 .card small{color:var(--tx2);font-size:12px}
@@ -43,25 +49,25 @@ h1{margin:6px 0 2px;font-size:clamp(24px,5vh,38px);font-weight:600;line-height:1
 .soon{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;color:var(--tx2);font-size:12px}
 .soon span.c{background:var(--neu);border-radius:16px;padding:4px 12px;font-size:13px;color:var(--tx)}
 .hide{display:none!important}
-@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr);gap:8px}header b{display:none}.seg button{padding:6px 10px}.badge{width:36px;height:36px;font-size:17px}.card{padding:8px;gap:4px}}
+@media(max-width:760px){.grid{gap:8px}header .home-link{padding:8px 10px}.home-link span:last-child{display:none}.seg button{padding:6px 10px}.badge{width:36px;height:36px;font-size:17px}.card{padding:8px;gap:4px;min-height:clamp(96px,18vh,140px)}.card small{display:none}.card h2{font-size:13px}}
+@media(max-width:600px){header{padding:8px;gap:4px}}
 @media(max-height:560px){.soon,.sub{display:none}}
 </style>
 </head>
 <body>
 <div id="app">
 <header>
-  <b class="serif" id="brand"></b>
-  <div class="tools">
-    <div class="seg serif" role="group" aria-label="Language">
-      <button data-l="te">తె</button><button data-l="hi">हि</button><button data-l="en">EN</button>
-    </div>
-    <button id="theme" aria-label="Theme">◐</button>
+  <span class="home-link" aria-current="page"><span class="icon" aria-hidden="true">🏠</span><span id="homeLbl">Home</span></span>
+  <h1 class="serif" id="brand"></h1>
+  <div class="seg serif" role="group" aria-label="Language">
+    <button data-l="te">తె</button><button data-l="hi">हि</button><button data-l="en">EN</button>
   </div>
+  <button id="theme" class="sec" aria-label="Toggle theme">◐</button>
 </header>
 <main>
   <div class="hero">
     <div class="om serif" aria-hidden="true">ॐ</div>
-    <h1 class="serif" id="title"></h1>
+    <h1 class="serif big" id="title"></h1>
     <p class="sub" id="sub"></p>
   </div>
   <div class="search">
@@ -89,11 +95,12 @@ var ITEMS=[
   t:{te:"శ్రీ వేంకటేశ్వర సుప్రభాతము",hi:"श्री वेंकटेश्वर सुप्रभातम्",en:"Sri Venkateswara Suprabhatam"},
   k:"venkateswara suprabhatam balaji tirumala govinda తిరుమల"}
 ];
+var ALL_URL="all.html"; // భవిష్యత్తులో చేసే "అన్నీ చూడండి" పేజీ / future "View All" page
 var SOON={te:["కథలు","వేదాలు","ఉపనిషత్తులు"],hi:["कथाएँ","वेद","उपनिषद"],en:["Stories","Vedas","Upanishads"]};
 var UI={
- te:{brand:"స్తోత్ర నిధి",title:"స్తోత్ర నిధి",sub:"స్తోత్రాలు, గ్రంథాలు – ఒకే చోట",ph:"గ్రంథం పేరు వెతకండి…",none:"ఏమీ దొరకలేదు. వేరే పేరుతో ప్రయత్నించండి.",soon:"త్వరలో:"},
- hi:{brand:"स्तोत्र निधि",title:"स्तोत्र निधि",sub:"स्तोत्र और ग्रंथ – एक ही स्थान पर",ph:"ग्रंथ का नाम खोजें…",none:"कुछ नहीं मिला। दूसरा नाम आज़माएँ।",soon:"जल्द आ रहा है:"},
- en:{brand:"Stotra Nidhi",title:"Stotra Nidhi",sub:"Stotrams and scriptures in one place",ph:"Search a stotram or scripture…",none:"No match found. Try another name.",soon:"Coming soon:"}
+ te:{brand:"స్తోత్ర నిధి",home:"Home",all:"అన్నీ చూడండి",allsub:"స్తోత్రాలు · వేదాలు · ఉపనిషత్తులు",ph2:"త్వరలో",title:"స్తోత్ర నిధి",sub:"స్తోత్రాలు, గ్రంథాలు – ఒకే చోట",ph:"గ్రంథం పేరు వెతకండి…",none:"ఏమీ దొరకలేదు. వేరే పేరుతో ప్రయత్నించండి.",soon:"త్వరలో:"},
+ hi:{brand:"स्तोत्र निधि",home:"Home",all:"सभी देखें",allsub:"स्तोत्र · वेद · उपनिषद",ph2:"जल्द",title:"स्तोत्र निधि",sub:"स्तोत्र और ग्रंथ – एक ही स्थान पर",ph:"ग्रंथ का नाम खोजें…",none:"कुछ नहीं मिला। दूसरा नाम आज़माएँ।",soon:"जल्द आ रहा है:"},
+ en:{brand:"Stotra Nidhi",home:"Home",all:"View All",allsub:"Stotras · Vedas · Upanishads",ph2:"Soon",title:"Stotra Nidhi",sub:"Stotrams and scriptures in one place",ph:"Search a stotram or scripture…",none:"No match found. Try another name.",soon:"Coming soon:"}
 };
 var L="te",$=function(i){return document.getElementById(i)},root=document.documentElement;
 try{L=localStorage.getItem("widu-lang")||"te"}catch(e){}
@@ -105,16 +112,22 @@ function other(it){return L==="en"?it.t.te:it.t.en}
 function render(){
   var u=UI[L],q=norm($("q").value),n=0;
   root.lang=L;document.title=u.title;
-  $("brand").textContent=u.brand;$("title").textContent=u.title;$("sub").textContent=u.sub;$("q").placeholder=u.ph;$("q").setAttribute("aria-label",u.ph);
+  $("brand").textContent=u.brand;$("homeLbl").textContent=u.home;$("title").textContent=u.title;$("sub").textContent=u.sub;$("q").placeholder=u.ph;$("q").setAttribute("aria-label",u.ph);
   document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.l===L)});
   var g=$("grid");g.innerHTML="";
-  ITEMS.forEach(function(it){
-    if(q&&hay(it).indexOf(q)<0)return;n++;
-    var a=document.createElement("a");a.className="card";a.href=encodeURI(it.file);
+  function tile(cls,href,glyph,t,sub){
+    var a=document.createElement(href?"a":"div");a.className="card"+(cls?" "+cls:"");if(href)a.href=href;
     a.innerHTML='<span class="badge serif"></span><h2 class="serif"></h2><small></small>';
-    a.children[0].textContent=it.g;a.children[1].textContent=it.t[L];a.children[2].textContent=other(it);
-    g.appendChild(a);
-  });
+    a.children[0].textContent=glyph;a.children[1].textContent=t;a.children[2].textContent=sub||"";
+    g.appendChild(a);return a;
+  }
+  var list=q?ITEMS.filter(function(it){return hay(it).indexOf(q)>=0}).slice(0,6):ITEMS.slice(0,5);
+  list.forEach(function(it){n++;tile("",encodeURI(it.file),it.g,it.t[L],other(it))});
+  if(!q){
+    for(var i=list.length;i<5;i++)tile("ph","","…",u.ph2,"");
+    tile("all",ALL_URL,"⋯",u.all,u.allsub);
+    n=1;
+  }
   $("none").textContent=u.none;$("none").classList.toggle("hide",n>0);
   $("soon").classList.toggle("hide",!!q);
   $("soon").innerHTML="";

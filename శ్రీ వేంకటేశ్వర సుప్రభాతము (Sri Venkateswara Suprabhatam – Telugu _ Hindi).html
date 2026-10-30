@@ -73,6 +73,16 @@ main{touch-action:pan-y}
 .mn{display:none;margin:6px auto 0;max-width:62ch;font-size:15px;line-height:1.85;color:var(--tx2)}.st.open .mn{display:block}
 .chips .mb{margin-left:8px}
 @media (max-width:640px){.bar{flex-wrap:nowrap;padding:4px 10px}#info{display:none}.chips{flex-wrap:nowrap;overflow-x:auto;width:100%;gap:5px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.chips::-webkit-scrollbar{display:none}.chips span{display:none}.chips button{flex:none;white-space:nowrap;padding:3px 10px;font-size:12px}.chips .mb{order:-1;margin-left:0}}
+
+/* ===== common-topbar v1 (same block in every page) ===== */
+header{min-height:56px;gap:8px;padding:8px 16px;background:var(--paper);border-bottom:1px solid var(--div)}
+header .home-link{order:-2;flex:none;white-space:nowrap}
+header h1{order:-1;flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header #theme{order:99;flex:none}
+.home-link.cur{pointer-events:none;background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+@media(max-width:760px){header .home-link{padding:8px 10px}header .home-link span:last-child{display:none}}
+@media(max-width:600px){header{padding:8px;gap:4px}}
+/* ===== end common-topbar ===== */
 </style>
 </head>
 <body>
