@@ -1,0 +1,43 @@
+{
+  "categories": [
+    { "id": "granthalu", "t": { "te": "గ్రంథాలు", "hi": "ग्रंथ", "en": "Scriptures" } },
+    { "id": "stotralu", "t": { "te": "స్తోత్రాలు", "hi": "स्तोत्र", "en": "Stotras" } },
+    { "id": "vedalu", "t": { "te": "వేదాలు", "hi": "वेद", "en": "Vedas" } },
+    { "id": "upanishattulu", "t": { "te": "ఉపనిషత్తులు", "hi": "उपनिषद", "en": "Upanishads" } }
+  ],
+  "items": [
+    {
+      "file": "శ్రీమద్ భగవద్గీత(SrimadBhagavadGita_Telugu)_V1.0.html",
+      "g": "ॐ",
+      "cat": "granthalu",
+      "t": { "te": "శ్రీమద్ భగవద్గీత", "hi": "श्रीमद् भगवद्गीता", "en": "Srimad Bhagavad Gita" },
+      "k": "gita geeta bhagavad krishna arjuna గీత కృష్ణ"
+    },
+    {
+      "file": "శ్రీ లలితా సహస్రనామం(Sri Lalita Sahasranamam)_V1.0.html",
+      "g": "❁",
+      "cat": "stotralu",
+      "t": { "te": "శ్రీ లలితా సహస్రనామం", "hi": "श्री ललिता सहस्रनाम", "en": "Sri Lalita Sahasranamam" },
+      "k": "lalita sahasranama devi amma అమ్మవారు దేవి"
+    },
+    {
+      "file": "శ్రీ హనుమాన్ చాలీసా (Sri Hanuman Chalisa_Telugu)_V1.0.html",
+      "g": "✦",
+      "cat": "stotralu",
+      "t": { "te": "శ్రీ హనుమాన్ చాలీసా", "hi": "श्री हनुमान चालीसा", "en": "Sri Hanuman Chalisa" },
+      "k": "hanuman chalisa anjaneya rama ఆంజనేయ"
+    },
+    {
+      "file": "శ్రీ వేంకటేశ్వర సుప్రభాతము (Sri Venkateswara Suprabhatam – Telugu _ Hindi).html",
+      "g": "✺",
+      "cat": "stotralu",
+      "t": { "te": "శ్రీ వేంకటేశ్వర సుప్రభాతము", "hi": "श्री वेंकटेश्वर सुप्रभातम्", "en": "Sri Venkateswara Suprabhatam" },
+      "k": "venkateswara suprabhatam balaji tirumala govinda తిరుమల"
+    }
+  ],
+  "soon": {
+    "te": ["కథలు", "వేదాలు", "ఉపనిషత్తులు"],
+    "hi": ["कथाएँ", "वेद", "उपनिषद"],
+    "en": ["Stories", "Vedas", "Upanishads"]
+  }
+}

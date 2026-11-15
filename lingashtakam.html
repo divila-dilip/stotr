@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lingashtakam – Telugu / Hindi Viewer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+Telugu:wght@400;600&family=Noto+Serif+Devanagari:wght@400;600&display=swap">
+<style>
+:root{--pri:#0B57D0;--bg:#F1F3F4;--paper:#FFFFFF;--tx:#1E1E1E;--tx2:#5E5E5E;--neu:#E8EAED;--err:#D32F2F;--div:#E0E0E0;--onpri:#fff;--hov:#0A47A6;--bd:#BDBDBD;--saf:#E65100;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--pri:#8AB4F8;--bg:#1F1F1F;--paper:#2B2B2B;--tx:#FFFFFF;--tx2:#B0B0B0;--neu:#424242;--err:#FF6B6B;--div:#404040;--onpri:#1F1F1F;--hov:#7CA8E8;--bd:#424242;--saf:#FFB74D;color-scheme:dark}
+html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 14px/1.5 Inter,sans-serif}
+#top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);box-shadow:0 1px 0 var(--div)}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 16px;background:var(--paper);border-bottom:1px solid var(--div)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--paper);z-index:6}
+header h1{font-size:18px;font-weight:600;margin:0;line-height:1.3;flex:1;font-family:"Noto Serif Telugu","Noto Serif Devanagari",Georgia,serif}
+button,input{font:500 14px Inter,sans-serif}
+button{background:var(--pri);color:var(--onpri);border:0;border-radius:20px;padding:8px 16px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+button:hover{background:var(--hov)}
+button:disabled{background:var(--neu);color:#BDBDBD;box-shadow:none;cursor:default}
+button.sec{background:var(--neu);color:var(--tx)}
+button.sec:hover{background:var(--div)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.seg{display:flex;background:var(--neu);border-radius:20px;padding:2px}
+.seg button{background:none;color:var(--tx);box-shadow:none;padding:6px 14px;font-family:"Noto Serif Telugu","Noto Serif Devanagari",Georgia,serif;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--pri);color:var(--onpri)}
+#jump{width:130px;padding:8px;border:2px solid var(--bd);border-radius:8px;background:var(--paper);color:var(--tx)}
+#jump:focus{border-color:var(--pri);outline:0}
+#jump.bad{border-color:var(--err);color:var(--err)}
+main{padding:16px 16px 24px;max-width:900px;margin:0 auto}
+.bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin:0;padding:6px 16px;background:var(--paper);border-bottom:1px solid var(--div)}
+.meta{color:var(--tx2);font-size:12px}
+.chips{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.chips span{color:var(--tx2);font-size:12px;margin-right:2px}
+.chips button{background:var(--neu);color:var(--tx);box-shadow:none;border-radius:16px;padding:4px 12px;font-size:13px}
+.chips button[aria-pressed="true"]{background:var(--pri);color:var(--onpri)}
+.card{background:var(--paper);border:1px solid var(--div);border-radius:12px;padding:8px 24px}
+.fnt{font-family:"Noto Serif Telugu","Noto Serif Devanagari",Georgia,serif}
+.fnt.hi{font-family:"Noto Serif Devanagari","Noto Serif Telugu",Georgia,serif}
+.sect{margin:20px 0 4px;text-align:center;font-size:15px;font-weight:600;color:var(--pri)}
+.st{padding:16px 0;border-bottom:1px solid var(--div);text-align:center;scroll-margin-top:72px}
+.st:last-child{border-bottom:0}
+.no{display:inline-block;background:var(--neu);color:var(--tx2);border-radius:12px;padding:2px 12px;font:600 12px Inter,sans-serif;margin-bottom:6px}
+.sl{margin:0;font-size:clamp(18px,4.6vw,23px);line-height:1.95;font-weight:400;overflow-wrap:anywhere}
+.st.flash{animation:fl 1.8s}@keyframes fl{0%,60%{background:var(--neu)}100%{background:transparent}}
+body.saf .sl{color:var(--saf)}
+.ctl{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.ctl button{min-width:110px}
+#pos{text-align:center}
+@media(max-width:1024px){.ctl{position:fixed;left:0;right:0;bottom:0;z-index:4;margin:0;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));background:var(--paper);border-top:1px solid var(--div)}main{padding-bottom:88px}}
+@media(max-width:600px){header{gap:4px;padding:8px}header h1{display:none}header button{padding:6px 9px}.seg button{padding:6px 8px}#jump{width:84px;padding:6px}.card{padding:4px 12px}}
+html{overflow-x:hidden}.sl,.mn{word-break:break-word;max-width:100%}
+@media(prefers-reduced-motion:reduce){.st.flash{animation:none}}
+/* v2.2 realistic page turn */
+#stage{position:relative;perspective:2400px;perspective-origin:50% 40%}
+#slide{box-shadow:1px 1px 0 var(--paper),2px 2px 0 var(--div),3px 3px 0 var(--paper),4px 4px 0 var(--div),6px 8px 14px rgba(0,0,0,.12)}
+.leaf{position:absolute;left:0;top:0;transform-style:preserve-3d;pointer-events:none;z-index:3}
+.strip{position:absolute;top:0;transform-origin:0 50%;transform-style:preserve-3d;will-change:transform}
+.face{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{transform:rotateY(180deg);background:var(--paper) linear-gradient(90deg,rgba(0,0,0,.05),transparent 40%)}
+.pg{position:absolute;top:0;margin:0}
+.ghost{background:transparent;border-color:transparent;opacity:.08}
+.sh{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+.spine::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.22),transparent 16px);pointer-events:none}
+.cast{position:absolute;inset:0;border-radius:12px;pointer-events:none;z-index:2}
+main{touch-action:pan-y}
+#ft{margin:32px 0 8px;text-align:center;color:var(--tx2);font-size:12px}#ft b{color:var(--tx)}#ft button{margin-top:8px}
+.inf{background:none;color:var(--pri);box-shadow:none;padding:0 4px;margin-left:4px;font-size:17px;line-height:1;border-radius:50%;vertical-align:middle}.inf:hover{background:var(--neu)}
+.mn{display:none;margin:6px auto 0;max-width:62ch;font-size:15px;line-height:1.85;color:var(--tx2)}.st.open .mn{display:block}
+.chips .mb{margin-left:8px}
+@media (max-width:640px){.bar{flex-wrap:nowrap;padding:4px 10px}#info{display:none}.chips{flex-wrap:nowrap;overflow-x:auto;width:100%;gap:5px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.chips::-webkit-scrollbar{display:none}.chips span{display:none}.chips button{flex:none;white-space:nowrap;padding:3px 10px;font-size:12px}.chips .mb{order:-1;margin-left:0}}
+</style>
+</head>
+<body>
+<div id="top">
+<header>
+ <h1 id="ttl"></h1>
+ <div class="seg" role="group" aria-label="Language"><button id="lte" aria-pressed="true">తెలుగు</button><button id="lhi" aria-pressed="false">हिन्दी</button></div>
+ <input id="jump" placeholder="Search / 1–9" inputmode="numeric" aria-label="Search verses or jump to verse number">
+ <button id="go">Go</button>
+ <button id="snd" class="sec" aria-label="Page-turn sound" aria-pressed="true" title="Page-turn sound">🔊</button>
+ <button id="saf" class="sec" aria-pressed="false" aria-label="Saffron text" title="Saffron text">🟠</button>
+ <button id="theme" class="sec" aria-label="Toggle theme">◐</button>
+</header>
+<div class="bar"><span class="meta" id="info"></span><div class="chips" id="pp" role="group" aria-label="Stanzas per page"></div></div>
+</div>
+<main>
+ <div id="stage"><div class="card fnt" id="slide"></div></div>
+ <div class="ctl"><button id="prev">‹ Previous</button><span class="meta" id="pos"></span><button id="next">Next ›</button></div>
+<footer id="ft"><div>Prepared by: <b>Dilip Raju Divila</b></div><button id="fb" class="sec">✎ Report a mistake / Suggest</button></footer>
+</main>
+<script>
+// Source text is Devanagari (Hindi). Telugu is generated from it by script transliteration (Unicode blocks are parallel).
+// Row format: label | line 1 | line 2.  D1/D2 = opening dohas, DE = closing doha, numbers = chaupai.
+var RAW=[["1", "ब्रह्ममुरारिसुरार्चितलिङ्गं निर्मलभासितशोभितलिङ्गम् ।", "जन्मजदुःखविनाशकलिङ्गं तत्प्रणमामि सदाशिवलिङ्गम् ॥"], ["2", "देवमुनिप्रवरार्चितलिङ्गं कामदहं करुणाकरलिङ्गम् ।", "रावणदर्पविनाशनलिङ्गं तत्प्रणमामि सदाशिवलिङ्गम् ॥"], ["3", "सर्वसुगन्धसुलेपितलिङ्गं बुद्धिविवर्धनकारणलिङ्गम् ।", "सिद्धसुरासुरवन्दितलिङ्गं तत्प्रणमामि सदाशिवलिङ्गम् ॥"], ["4", "कनकमहामणिभूषितलिङ्गं फणिपतिवेष्टितशोभितलिङ्गम् ।", "दक्षसुयज्ञविनाशनलिङ्गं तत्प्रणमामि सदाशिवलिङ्गम् ॥"], ["5", "कुङ्कुमचन्दनलेपितलिङ्गं पङ्कजहारसुशोभितलिङ्गम् ।", "सञ्चितपापविनाशनलिङ्गं तत्प्रणमामि सदाशिवलिङ्गम् ॥"], ["6", "देवगणार्चितसेवितलिङ्गं भावैर्भक्तिभिरेव च लिङ्गम् ।", "दिनकरकोटिप्रभाकरलिङ्गं तत्प्रणमामि सदाशिवलिङ्गम् ॥"], ["7", "अष्टदलोपरिवेष्टितलिङ्गं सर्वसमुद्भवकारणलिङ्गम् ।", "अष्टदरिद्रविनाशितलिङ्गं तत्प्रणमामि सदाशिवलिङ्गम् ॥"], ["8", "सुरगुरुसुरवरपूजितलिङ्गं सुरवनपुष्पसदार्चितलिङ्गम् ।", "परात्परं परमात्मकलिङ्गं तत्प्रणमामि सदाशिवलिङ्गम् ॥"], ["9", "लिङ्गाष्टकमिदं पुण्यं यः पठेच्छिवसन्निधौ ।", "शिवलोकमवाप्नोति शिवेन सह मोदते ॥"], ["ॐ", "ॐ नमः शिवाय"]].map(function(r){return{k:r[0],l:r.slice(1)}});
+var $=function(i){return document.getElementById(i)},N=RAW.length,PPS=[2,3,5,N],PP=3,L="te",c=1,saf=false;
+var MH={"0": "ब्रह्मा, विष्णु आदि देवताओं द्वारा पूजित, निर्मल तेज से शोभित, जन्म से उत्पन्न दुःखों का नाश करने वाले उस सदाशिव लिंग को मैं प्रणाम करता हूँ।", "1": "देवताओं और श्रेष्ठ मुनियों द्वारा पूजित, कामदेव को भस्म करने वाले, करुणा के सागर, रावण का अहंकार नष्ट करने वाले उस सदाशिव लिंग को मैं प्रणाम करता हूँ।", "2": "सब प्रकार के सुगंधित द्रव्यों से लेपित, बुद्धि को बढ़ाने वाले, सिद्धों, देवताओं और असुरों द्वारा वंदित उस सदाशिव लिंग को मैं प्रणाम करता हूँ।", "3": "स्वर्ण और महामणियों से विभूषित, नागराज से लिपटकर शोभित, दक्ष के यज्ञ का विनाश करने वाले उस सदाशिव लिंग को मैं प्रणाम करता हूँ।", "4": "कुंकुम और चंदन से लेपित, कमल की माला से सुशोभित, संचित पापों का नाश करने वाले उस सदाशिव लिंग को मैं प्रणाम करता हूँ।", "5": "देवगणों द्वारा भक्तिभाव से पूजित और सेवित, करोड़ों सूर्यों के समान प्रभा वाले उस सदाशिव लिंग को मैं प्रणाम करता हूँ।", "6": "आठ दल वाले कमल पर विराजमान, समस्त सृष्टि की उत्पत्ति के कारण, आठ प्रकार की दरिद्रता का नाश करने वाले उस सदाशिव लिंग को मैं प्रणाम करता हूँ।", "7": "देवगुरु बृहस्पति और श्रेष्ठ देवताओं द्वारा पूजित, देववन के पुष्पों से सदा अर्चित, परात्पर परमात्म स्वरूप उस सदाशिव लिंग को मैं प्रणाम करता हूँ।", "8": "जो इस पुण्यदायी लिंगाष्टक को शिव के सान्निध्य में पढ़ता है, वह शिवलोक को प्राप्त करता है और शिव के साथ आनंदित होता है।", "9": "पंचाक्षरी मंत्र — भगवान शिव को नमस्कार।"},MT={"0": "బ్రహ్మ, విష్ణువు మొదలైన దేవతలచే పూజింపబడేదీ, నిర్మలమైన కాంతితో ప్రకాశించేదీ, జన్మ వలన కలిగే దుఃఖాలను నశింపజేసేదీ అయిన ఆ సదాశివలింగానికి నమస్కరిస్తున్నాను.", "1": "దేవతలు, శ్రేష్ఠ మునులచే పూజింపబడేదీ, కాముని దహించినదీ, కరుణకు నిలయమైనదీ, రావణుని గర్వాన్ని అణచినదీ అయిన ఆ సదాశివలింగానికి నమస్కరిస్తున్నాను.", "2": "సకల సుగంధ ద్రవ్యాలతో అలంకరింపబడేదీ, బుద్ధిని వృద్ధి చేసేదీ, సిద్ధులు, సురులు, అసురులచే వందింపబడేదీ అయిన ఆ సదాశివలింగానికి నమస్కరిస్తున్నాను.", "3": "బంగారం, మహామణులతో అలంకరింపబడేదీ, సర్పరాజు చుట్టుకొని శోభిల్లేదీ, దక్షుని యజ్ఞాన్ని ధ్వంసం చేసినదీ అయిన ఆ సదాశివలింగానికి నమస్కరిస్తున్నాను.", "4": "కుంకుమ, చందనాలతో అలంకరింపబడేదీ, కమలహారాలతో శోభిల్లేదీ, పోగుచేసిన పాపాలను నశింపజేసేదీ అయిన ఆ సదాశివలింగానికి నమస్కరిస్తున్నాను.", "5": "దేవగణాలచే భక్తిభావంతో పూజింపబడి సేవింపబడేదీ, కోటి సూర్యుల తేజస్సు గలదీ అయిన ఆ సదాశివలింగానికి నమస్కరిస్తున్నాను.", "6": "ఎనిమిది రేకుల పద్మంపై ఆసీనమైనదీ, సమస్త సృష్టికి మూలకారణమైనదీ, అష్టవిధ దారిద్ర్యాలను నశింపజేసేదీ అయిన ఆ సదాశివలింగానికి నమస్కరిస్తున్నాను.", "7": "దేవగురువు బృహస్పతి, శ్రేష్ఠ దేవతలచే పూజింపబడేదీ, దేవతావనపు పుష్పాలతో సదా అర్చింపబడేదీ, పరాత్పరమైన పరమాత్మ స్వరూపమైనదీ అయిన ఆ సదాశివలింగానికి నమస్కరిస్తున్నాను.", "8": "ఈ పుణ్యప్రదమైన లింగాష్టకాన్ని శివ సన్నిధిలో పఠించేవారు శివలోకాన్ని పొంది శివునితో కలిసి ఆనందిస్తారు.", "9": "పంచాక్షరీ మంత్రం — శివునికి నమస్కారం."};
+var SHOWM=false;try{SHOWM=localStorage.getItem("la-showm")=="1"}catch(e){}
+var HD={0:"लिङ्गाष्टकम्",8:"फलश्रुतिः"},TT="लिङ्गाष्टकम्",SEC=[["लिङ्गाष्टकम्",0],["फलश्रुतिः",8]],DOHA="";
+try{var q=+localStorage.getItem("la-pp");if(PPS.indexOf(q)>-1)PP=q;L=localStorage.getItem("la-lang")=="hi"?"hi":"te"}catch(e){}
+function tel(s){return s.replace(/ॐ/g,"ఓం").replace(/\s*॥/g," ||").replace(/\s*।/g," |").replace(/[\u0900-\u097F]/g,function(ch){var n=ch.charCodeAt(0);if(n==0x93C)return"";if(n==0x901)n=0x902;return String.fromCharCode(n+0x300)})}
+function T(s){return L=="te"?(s=="Śrī"?s:tel(s)):s}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function lab(k){if(!/^\d+$/.test(k))return T(k);return k=="D1"?T(DOHA)+" 1":k=="D2"?T(DOHA)+" 2":k=="DE"?T(DOHA):k}
+function pages(){return Math.ceil(N/PP)}
+function nbr(d){return d=="next"?(c<pages()?[c+1,1]:null):(c>1?[c-1,1]:null)}
+var AC=null,NB=null,DV=null,MG=null,SND=true,VOL=.3; // VOL = master volume (0 to 1)
+try{SND=localStorage.getItem("widu-snd")!="0"}catch(e){}
+function ac(){if(!SND)return null;if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}
+ var L=AC.sampleRate*2,b=AC.createBuffer(1,L,AC.sampleRate),d=b.getChannelData(0),l=0;
+ for(var i=0;i<L;i++){d[i]=Math.random()*2-1}NB=b;MG=AC.createGain();MG.gain.value=VOL;var cp=AC.createDynamicsCompressor();cp.threshold.value=-24;cp.ratio.value=6;MG.connect(cp);cp.connect(AC.destination)}
+ if(AC.state=="suspended")AC.resume();return AC}
+function voice(f,q){var s=AC.createBufferSource(),fl=AC.createBiquadFilter(),g=AC.createGain();s.buffer=NB;s.loop=true;fl.type="bandpass";fl.frequency.value=f;fl.Q.value=q;g.gain.value=0;s.connect(fl);fl.connect(g);g.connect(MG);s.start(0,Math.random()*1.5);return{s:s,f:fl,g:g}}
+function grain(t,a,f){var s=AC.createBufferSource(),fl=AC.createBiquadFilter(),g=AC.createGain(),L=.008+Math.random()*.02;s.buffer=NB;fl.type="bandpass";fl.frequency.value=f;fl.Q.value=1.2;s.connect(fl);fl.connect(g);g.connect(MG);
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(a,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+L);s.start(t,Math.random()*1.5);s.stop(t+L+.02)}
+function rustle(dur,vol){if(!ac())return;var t=AC.currentTime,n=Math.round(10+dur*18),i,k=24,c=new Float32Array(k);
+ for(i=0;i<n;i++){var x=Math.pow(Math.random(),1.6)*.85;grain(t+x*dur,vol*(.25+Math.random()*.75)*(1-x*.5),2500+Math.random()*4500)}
+ var v=voice(900,.5);for(i=0;i<k;i++){var y=i/(k-1);c[i]=vol*.45*Math.pow(Math.sin(Math.PI*Math.pow(y,.7)),2)}
+ v.g.gain.setValueCurveAtTime(c,t,dur);v.f.frequency.setValueCurveAtTime(new Float32Array([600,1300,1900,1200,700]),t,dur);v.s.stop(t+dur+.05)}
+function slap(vol){if(!ac())return;var t=AC.currentTime,v=voice(320,.7);v.g.gain.setValueAtTime(vol*.9,t);v.g.gain.exponentialRampToValueAtTime(.0001,t+.09);v.s.stop(t+.12);grain(t,vol*.6,2200)}
+function dragSnd(l){if(!ac())return;if(!DV)DV=voice(900,.5);var t=AC.currentTime,g=DV.g.gain;g.cancelScheduledValues(t);g.setTargetAtTime(l*.9,t,.04);g.setTargetAtTime(0,t+.07,.08);DV.f.frequency.setTargetAtTime(600+l*5000,t,.04);if(Math.random()<l*5)grain(t,l*3,2500+Math.random()*4500)}
+function dragSndEnd(){if(!DV||!AC)return;var v=DV,t=AC.currentTime;DV=null;v.g.gain.cancelScheduledValues(t);v.g.gain.setTargetAtTime(0,t,.04);v.s.stop(t+.3)}
+
+var TA=null,RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function endTurn(){if(!TA)return;var a=TA;TA=null;cancelAnimationFrame(a.raf);a.leaf.remove();a.cast.remove();$("slide").innerHTML=a.fin;if(a.go)go(a.go[0])}
+function mkLeaf(front,W,H){
+ var st=$("stage"),n=14,sw=W/n,leaf=document.createElement("div"),cast=document.createElement("div"),S=[],SH=[],par=leaf,R=Math.PI/180;
+ leaf.className="leaf";leaf.style.width=W+"px";leaf.style.height=H+"px";
+ leaf.setAttribute("inert","");leaf.setAttribute("aria-hidden","true");cast.className="cast";
+ for(var i=0;i<n;i++){
+  var s=document.createElement("div"),pos='left:'+(-i*sw)+'px;width:'+W+'px;height:'+H+'px';
+  s.className="strip";s.style.cssText="left:"+(i?sw:0)+"px;width:"+(sw+.7)+"px;height:"+H+"px";
+  s.innerHTML='<div class="face fr'+(i?'':' spine')+'"><div class="card pg '+FC()+'" style="'+pos+'">'+front+'</div><i class="sh"></i></div><div class="face bk"><div class="card pg ghost '+FC()+'" style="'+pos+'">'+front+'</div><i class="sh"></i></div>';
+  par.appendChild(s);par=s;S.push(s);SH.push(s.querySelectorAll(".sh"))
+ }
+ st.appendChild(cast);st.appendChild(leaf);TA={raf:0,leaf:leaf,cast:cast,fin:""};
+ return function(p){
+  var m=p*180,bend=1.3*Math.sin(2*Math.PI*p),cum=0;
+  for(var i=0;i<n;i++){
+   var ang=m/n+(i?bend:0);cum+=ang;S[i].style.transform="rotateY("+(-ang)+"deg)";
+   var sh=.42*Math.pow(Math.abs(Math.sin(cum*R)),1.1);SH[i][0].style.opacity=sh;SH[i][1].style.opacity=sh
+  }
+  var px=W*Math.max(0,Math.cos(cum*R)),a=.3*Math.sin(Math.PI*p);
+  cast.style.background="linear-gradient(90deg,rgba(0,0,0,"+a+") "+px+"px,rgba(0,0,0,0) "+(px+W*.4)+"px)";
+  leaf.style.opacity=p>.7?Math.max(0,1-(p-.7)/.3):1
+ }
+}
+function runTo(set,from,to,dur,done){var T=performance.now();
+ function f(now){var t=Math.min(1,(now-T)/dur),e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;set(from+(to-from)*e);if(t<1)TA.raf=requestAnimationFrame(f);else done()}
+ TA.raf=requestAnimationFrame(f)}
+function setup(oldH,newH,dir){ // returns {set,W}
+ var sl=$("slide"),next=dir=="next",W=sl.offsetWidth,H,front;
+ if(next){H=sl.offsetHeight;front=oldH;sl.innerHTML=newH}
+ else{sl.innerHTML=newH;H=sl.offsetHeight;front=newH;sl.innerHTML=oldH}
+ return{set:mkLeaf(front,W,H),W:W}}
+function turnPage(h,dir){
+ var sl=$("slide");endTurn();var oldH=sl.innerHTML;
+ if(!dir||RM||!oldH){sl.innerHTML=h;return}
+ var next=dir=="next",set=setup(oldH,h,dir).set;TA.fin=h;set(next?0:1);rustle(1,.5);
+ runTo(set,next?0:1,next?1:0,1000,function(){slap(.6);endTurn()})
+}
+
+
+function FC(){return "fnt"+(L=="hi"?" hi":"")}
+function pageHTML(p){var a=(p-1)*PP,b=Math.min(N,p*PP),h="",i,v;
+ for(i=a;i<b;i++){v=RAW[i];if(HD[i])h+='<h2 class="sect">'+esc(T(HD[i]))+'</h2>';
+  var mm=(L=="hi"?MH:MT)[i];h+='<section class="st'+(mm&&SHOWM?' open':'')+'" data-i="'+i+'"><span class="no">'+esc(lab(v.k))+'</span>'+(mm?'<button class="inf" aria-expanded="'+SHOWM+'" aria-label="Meaning" title="Meaning">ⓘ</button>':'')+'<p class="sl">'+v.l.map(function(x){return esc(T(x))}).join('<br>')+'</p>'+(mm?'<p class="mn">'+esc(mm)+'</p>':'')+'</section>'}
+ return h}
+function render(focus,dir){var a=(c-1)*PP,b=Math.min(N,c*PP),s=$("slide");
+ s.className="card fnt"+(L=="hi"?" hi":"");s.lang=L;document.documentElement.lang=L;
+ turnPage(pageHTML(c),dir);$("ttl").textContent=L=="te"?"లింగాష్టకం":TT;
+ $("info").textContent="Verses "+(a+1)+"–"+b+" of "+N+"";
+ $("pos").textContent="Page "+c+" / "+pages();
+ $("prev").disabled=c<=1;$("next").disabled=c>=pages();
+ $("lte").setAttribute("aria-pressed",L=="te");$("lhi").setAttribute("aria-pressed",L=="hi");
+ $("pp").innerHTML=SEC.map(function(x){return '<button data-s="'+x[1]+'" class="fnt'+(L=="hi"?" hi":"")+'">'+esc(T(x[0]))+'</button>'}).join("")+"<span> · Per page</span>"+PPS.map(function(n){return '<button data-n="'+n+'" aria-pressed="'+(n==PP)+'">'+(n==N?"All":n)+'</button>'}).join("")+'<button class="mb" data-m="1" aria-pressed="'+SHOWM+'">ⓘ Meanings</button>';
+ try{localStorage.setItem("la-pos",a)}catch(e){}
+ var el=focus!=null&&s.querySelector('[data-i="'+focus+'"]');
+ if(el){el.classList.add("flash");el.scrollIntoView({block:"start"})}else scrollTo(0,0)}
+function go(n,dir){if(n>=1&&n<=pages()){c=n;render(null,dir)}}
+function setLang(l){L=l;try{localStorage.setItem("la-lang",l)}catch(e){}var y=scrollY;render();scrollTo(0,y)}
+$("lte").onclick=function(){setLang("te")};$("lhi").onclick=function(){setLang("hi")};
+$("next").onclick=function(){go(c+1,"next")};$("prev").onclick=function(){go(c-1,"prev")};
+$("pp").onclick=function(e){var b=e.target.closest("button");if(!b)return;if(b.dataset.s){var q=+b.dataset.s;c=Math.floor(q/PP)+1;render(q);return}if(b.dataset.m){SHOWM=!SHOWM;try{localStorage.setItem("la-showm",SHOWM?"1":"0")}catch(x){}var y=scrollY;render();scrollTo(0,y);return}var first=(c-1)*PP;PP=+b.dataset.n;c=Math.floor(first/PP)+1;try{localStorage.setItem("la-pp",PP)}catch(x){}render()};
+var SQ="",SM=[],SI=0;
+function nz(x){return x.replace(/[\s\u0964\u0965|\-,.;:'\u2019"\u201C\u201D\u200C\u200D]/g,"").toLowerCase()}
+function jump(){var j=$("jump"),v=j.value.trim();if(!v){j.className="";return}
+ if(/^\d{1,2}$/.test(v)){var k=+v,ok=k>=1&&k<=9;j.className=ok?"":"bad";if(ok){var i=k-1;c=Math.floor(i/PP)+1;render(i);j.blur()}return}
+ var q=nz(v);if(q!=SQ){SQ=q;SM=[];SI=0;var M=L=="hi"?MH:MT;
+  RAW.forEach(function(r,i){var t=r.l.join(" ");if(nz(t).indexOf(q)>-1||nz(tel(t)).indexOf(q)>-1||(M[i]&&nz(M[i]).indexOf(q)>-1))SM.push(i)})}
+ else SI=(SI+1)%Math.max(1,SM.length);
+ j.className=SM.length?"":"bad";if(!SM.length){$("info").textContent="No match for \u201C"+v+"\u201D";return}
+ var i=SM[SI];c=Math.floor(i/PP)+1;render(i);$("info").textContent="Match "+(SI+1)+" of "+SM.length+" \u00B7 press Go/Enter for next"}
+$("go").onclick=jump;$("jump").onkeydown=function(e){if(e.key=="Enter")jump()};
+document.onkeydown=function(e){if(e.target.tagName=="INPUT")return;if(e.key=="ArrowRight")go(c+1,"next");if(e.key=="ArrowLeft")go(c-1,"prev")};
+var mn=document.querySelector("main"),G=null;
+mn.addEventListener("touchstart",function(e){if(e.touches.length>1||e.target.closest(".ctl"))return;endTurn();var t=e.touches[0];G={x:t.clientX,y:t.clientY,t:performance.now()}},{passive:true});
+mn.addEventListener("touchmove",function(e){if(!G)return;var t=e.touches[0],dx=t.clientX-G.x,dy=t.clientY-G.y,now=performance.now();
+ if(!G.set){
+  if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.3){if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx))G=null;return}
+  if(RM)return;
+  var dir=dx<0?"next":"prev",nb=nbr(dir);if(!nb){G=null;return}
+  var fin=pageHTML(nb[0]),old=$("slide").innerHTML,L=setup(old,fin,dir);
+  TA.fin=old;G.set=L.set;G.dir=dir;G.nb=nb;G.fin=fin;G.old=old;G.W=L.W;G.sx=t.clientX;G.lp=dir=="next"?0:1;G.lq=0;G.v=0;G.lt=now;G.q=0;G.set(G.lp);ac()
+ }
+ var span=Math.min(G.W*.85,420),d=t.clientX-G.sx,q=Math.max(0,Math.min(1,(G.dir=="next"?-d:d)/span)),p=G.dir=="next"?q:1-q,dt=Math.max(1,now-G.lt);
+ G.v=.6*G.v+.4*(q-G.lq)/dt;dragSnd(Math.min(.3,Math.abs(p-G.lp)/dt*75));
+ G.q=q;G.lq=q;G.lp=p;G.lt=now;G.set(p)
+},{passive:true});
+mn.addEventListener("touchend",function(e){var g=G;G=null;if(!g)return;
+ if(!g.set){if(RM){var t=e.changedTouches[0],dx=t.clientX-g.x,dy=t.clientY-g.y;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){dx<0?next():prev()}}return}
+ dragSndEnd();
+ var nx=g.dir=="next",commit=g.q>.4||(g.v>.0012&&g.q>.08),p=nx?g.q:1-g.q,tp=commit?(nx?1:0):(nx?0:1),dur=150+700*Math.abs(tp-p);
+ if(commit){TA.fin=g.fin;TA.go=g.nb;rustle(dur/1000,.4)}
+ runTo(g.set,p,tp,dur,function(){slap(commit?.6:.2);endTurn()})
+},{passive:true});
+mn.addEventListener("touchcancel",function(){var g=G;G=null;if(g&&g.set){dragSndEnd();endTurn()}},{passive:true});
+function sndUI(){var b=$("snd");b.textContent=SND?"🔊":"🔇";b.setAttribute("aria-pressed",SND)}
+$("snd").onclick=function(){SND=!SND;try{localStorage.setItem("widu-snd",SND?"1":"0")}catch(e){}sndUI();if(SND)rustle(.5,.4);else dragSndEnd()};sndUI();
+
+$("slide").addEventListener("click",function(e){var b=e.target.closest(".inf");if(b){var o=b.closest(".st").classList.toggle("open");b.setAttribute("aria-expanded",o)}});
+$("saf").onclick=function(){saf=!saf;document.body.classList.toggle("saf",saf);this.setAttribute("aria-pressed",saf)};
+function setTheme(m){document.documentElement.setAttribute("data-theme",m)}
+var mode;try{mode=localStorage.getItem("widu-theme-mode")}catch(e){}
+setTheme(mode||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));
+$("theme").onclick=function(){var n=document.documentElement.getAttribute("data-theme")=="light"?"dark":"light";setTheme(n);try{localStorage.setItem("widu-theme-mode",n)}catch(e){}};
+try{var r=+localStorage.getItem("la-pos");if(r>0&&r<N)c=Math.floor(r/PP)+1}catch(e){}
+var FEEDBACK_URL="https://forms.gle/q34LuE2QsMxpFwww8";   // Google Form link (the one ending in /viewform)
+var FB_FIELD="";       // optional: the form's verse field id, like entry.123456789 (auto-fills the verse number)
+$("fb").onclick=function(){if(!FEEDBACK_URL){alert("Feedback link is not set yet.");return}var u=FEEDBACK_URL;if(FB_FIELD)u+=(u.indexOf("?")>0?"&":"?")+"usp=pp_url&"+FB_FIELD+"="+encodeURIComponent(RAW[(c-1)*PP].k);window.open(u,"_blank","noopener")};
+render();
+</script>
+</body>
+</html>

@@ -80,23 +80,9 @@ h1{margin:6px 0 2px;font-size:clamp(24px,5vh,38px);font-weight:600;line-height:1
 </main>
 </div>
 <script>
-// ===== ఇక్కడ కొత్త గ్రంథాలను జోడించండి / ADD NEW ITEMS HERE =====
-var ITEMS=[
- {file:"శ్రీమద్ భగవద్గీత(SrimadBhagavadGita_Telugu)_V1.0.html",g:"ॐ",
-  t:{te:"శ్రీమద్ భగవద్గీత",hi:"श्रीमद् भगवद्गीता",en:"Srimad Bhagavad Gita"},
-  k:"gita geeta bhagavad krishna arjuna గీత కృష్ణ"},
- {file:"శ్రీ లలితా సహస్రనామం(Sri Lalita Sahasranamam)_V1.0.html",g:"❁",
-  t:{te:"శ్రీ లలితా సహస్రనామం",hi:"श्री ललिता सहस्रनाम",en:"Sri Lalita Sahasranamam"},
-  k:"lalita sahasranama devi amma అమ్మవారు దేవి"},
- {file:"శ్రీ హనుమాన్ చాలీసా (Sri Hanuman Chalisa_Telugu)_V1.0.html",g:"✦",
-  t:{te:"శ్రీ హనుమాన్ చాలీసా",hi:"श्री हनुमान चालीसा",en:"Sri Hanuman Chalisa"},
-  k:"hanuman chalisa anjaneya rama ఆంజనేయ"},
- {file:"శ్రీ వేంకటేశ్వర సుప్రభాతము (Sri Venkateswara Suprabhatam – Telugu _ Hindi).html",g:"✺",
-  t:{te:"శ్రీ వేంకటేశ్వర సుప్రభాతము",hi:"श्री वेंकटेश्वर सुप्रभातम्",en:"Sri Venkateswara Suprabhatam"},
-  k:"venkateswara suprabhatam balaji tirumala govinda తిరుమల"}
-];
+// ===== గ్రంథాలు items.json లో జోడించండి / ADD NEW ITEMS IN items.json =====
+var ITEMS=[],SOON={te:[],hi:[],en:[]}; // loaded from items.json
 var ALL_URL="all.html"; // భవిష్యత్తులో చేసే "అన్నీ చూడండి" పేజీ / future "View All" page
-var SOON={te:["కథలు","వేదాలు","ఉపనిషత్తులు"],hi:["कथाएँ","वेद","उपनिषद"],en:["Stories","Vedas","Upanishads"]};
 var UI={
  te:{brand:"స్తోత్ర నిధి",home:"Home",all:"అన్నీ చూడండి",allsub:"స్తోత్రాలు · వేదాలు · ఉపనిషత్తులు",ph2:"త్వరలో",title:"స్తోత్ర నిధి",sub:"స్తోత్రాలు, గ్రంథాలు – ఒకే చోట",ph:"గ్రంథం పేరు వెతకండి…",none:"ఏమీ దొరకలేదు. వేరే పేరుతో ప్రయత్నించండి.",soon:"త్వరలో:"},
  hi:{brand:"स्तोत्र निधि",home:"Home",all:"सभी देखें",allsub:"स्तोत्र · वेद · उपनिषद",ph2:"जल्द",title:"स्तोत्र निधि",sub:"स्तोत्र और ग्रंथ – एक ही स्थान पर",ph:"ग्रंथ का नाम खोजें…",none:"कुछ नहीं मिला। दूसरा नाम आज़माएँ।",soon:"जल्द आ रहा है:"},
@@ -149,7 +135,10 @@ $("theme").onclick=function(){
   TM=root.getAttribute("data-theme")==="dark"?"light":"dark";
   try{localStorage.setItem("widu-theme-mode",TM)}catch(e){}applyTheme(TM);
 };
-render();
+var ERR={te:"items.json లోడ్ కాలేదు. వెబ్ సర్వర్ నుండి తెరవండి.",hi:"items.json लोड नहीं हुआ। वेब सर्वर से खोलें।",en:"Could not load items.json. Open this page from a web server."};
+fetch("items.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+  ITEMS=d.items||[];SOON=d.soon||SOON;render();
+}).catch(function(){render();$("none").textContent=ERR[L];$("none").classList.remove("hide")});
 </script>
 </body>
 </html>
